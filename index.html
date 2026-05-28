@@ -1345,11 +1345,11 @@
         <nav class="menu">
           <button class="menu-item active" data-page="dashboard">📋 Dashboard</button>
           <button class="menu-item" data-page="dotacion">👥 Dotación</button>
-          <button class="menu-item" data-page="dashboard">🧑‍🌾 Trabajadores</button>
-          <button class="menu-item" data-page="dashboard">📅 Ausencias</button>
-          <button class="menu-item" data-page="dashboard">🌴 Vacaciones</button>
+          <button class="menu-item" data-page="trabajadores">🧑‍🌾 Trabajadores</button>
+          <button class="menu-item" data-page="ausencias">📅 Ausencias</button>
+          <button class="menu-item" data-page="vacaciones">🌴 Vacaciones</button>
           <button class="menu-item" data-page="replacements">🔁 Reemplazos</button>
-          <button class="menu-item" data-page="dashboard">⚠️ Cargos críticos</button>
+          <button class="menu-item" data-page="criticos">⚠️ Cargos críticos</button>
           <button class="menu-item" data-page="dashboard">📄 Reportes</button>
           <button class="menu-item" data-page="dashboard">⚙️ Configuración</button>
         </nav>
@@ -2742,14 +2742,30 @@ Días que exigen reemplazo día 3+: ${s.daysRequireReplacement}\nDías cubiertos
     });
 
     function showPage(page) {
-      document.querySelectorAll('.dashboard-page').forEach(el => el.style.display = (page === 'dashboard') ? '' : 'none');
+      const isDashboardView = ['dashboard', 'trabajadores', 'ausencias', 'vacaciones', 'criticos'].includes(page);
+      document.querySelectorAll('.dashboard-page').forEach(el => el.style.display = isDashboardView ? '' : 'none');
       const rep = $('replacementsPage');
       if (rep) rep.style.display = (page === 'replacements') ? '' : 'none';
       const dot = $('dotacionPage');
       if (dot) dot.style.display = (page === 'dotacion') ? '' : 'none';
+      
       document.querySelectorAll('.menu-item').forEach(btn => btn.classList.toggle('active', btn.dataset.page === page));
+      
       const main = document.querySelector('main');
-      if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+      if (main) {
+        if (page === 'ausencias' || page === 'vacaciones') {
+          const section = document.querySelector('.absence-section');
+          if (section) main.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+        } else if (page === 'criticos') {
+          const section = document.querySelector('.bottom-grid');
+          if (section) main.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+        } else if (page === 'trabajadores') {
+          const section = document.querySelector('.grid-main');
+          if (section) main.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+        } else {
+          main.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
     }
 
     document.querySelectorAll('.menu-item[data-page]').forEach(btn => {
