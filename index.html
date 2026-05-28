@@ -2727,7 +2727,7 @@
       if (!pendingWorkbook) return showToast('Primero carga un Excel para cambiar de hoja.');
       processSelectedSheet(e.target.value);
     });
-    $('copySummaryBtn').addEventListener('click', async () => {
+    $('generateReportBtn').addEventListener('click', async () => {
       if (!currentSummary) return showToast('Primero carga un Excel para generar el resumen.');
       const s = currentSummary;
       const text = `AKRO Dotación AI Beta - ${s.period}\n\nDotación requerida: ${BASE_REQUIRED}\nTrabajadores nominales: ${s.nominal}\nDotación presente real actual día ${s.lastAnalyzedDay}: ${s.currentPresent}\nDiferencia vs base técnica actual: ${s.totalDiff}\nAusencias registradas: ${s.totalAbsenceMarks}\nTrabajadores con posible multa por ausencia: ${s.workersWithPotentialFine || 0}
@@ -2785,7 +2785,6 @@ Días que exigen reemplazo día 3+: ${s.daysRequireReplacement}\nDías cubiertos
       URL.revokeObjectURL(a.href);
     });
 
-    $('generateReportBtn').addEventListener('click', () => $('copySummaryBtn').click());
 
     function recalculateWithBaseTech() {
       getRequiredConfig();
