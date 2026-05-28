@@ -2755,13 +2755,13 @@ Días que exigen reemplazo día 3+: ${s.daysRequireReplacement}\nDías cubiertos
       if (main) {
         if (page === 'ausencias' || page === 'vacaciones') {
           const section = document.querySelector('.absence-section');
-          if (section) main.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else if (page === 'criticos') {
           const section = document.querySelector('.bottom-grid');
-          if (section) main.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else if (page === 'trabajadores') {
           const section = document.querySelector('.grid-main');
-          if (section) main.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
           main.scrollTo({ top: 0, behavior: 'smooth' });
         }
