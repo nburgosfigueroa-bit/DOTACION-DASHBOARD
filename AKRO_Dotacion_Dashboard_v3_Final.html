@@ -1,0 +1,2791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AKRO Dotación AI - v2.7 Estándar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --panel: #ffffff;
+      --dark: #121b20;
+      --dark-2: #1c2930;
+      --gold: #d3a24f;
+      --gold-soft: #f7ead2;
+      --green: #3f9c5c;
+      --green-soft: #e5f4e8;
+      --red: #d93d32;
+      --red-soft: #fde6e3;
+      --orange: #e08a2e;
+      --orange-soft: #fff1df;
+      --blue: #357da7;
+      --blue-soft: #e8f2f8;
+      --purple: #8b70d6;
+      --purple-soft: #eee9fb;
+      --muted: #6f6f6f;
+      --border: #e8e1d7;
+      --shadow: 0 18px 42px rgba(36, 30, 20, .08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: #111; }
+
+    .app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+    .sidebar {
+      height: 100vh; position: sticky; top: 0; overflow-y: auto;
+      background: linear-gradient(165deg, #111a1f 0%, #1c2930 65%, #10171b 100%);
+      color: #fff; padding: 22px 16px; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .brand { display: flex; gap: 14px; align-items: center; margin-bottom: 24px; }
+    .logo {
+      width: 54px; height: 54px; border-radius: 16px;
+      background: linear-gradient(135deg, #f2d08f, #be8535);
+      color: #151515; display: grid; place-items: center; font-weight: 900; font-size: 32px;
+    }
+    .brand h1 { margin: 0; font-size: 30px; line-height: .95; letter-spacing: .5px; }
+    .brand span { display: block; color: #f0d39a; font-size: 13px; letter-spacing: 2.4px; font-weight: 800; margin-top: 4px; }
+
+    .menu { display: grid; gap: 8px; }
+    .menu-item {
+      border: 0; cursor: pointer; background: transparent; color: #dfe6e8;
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      padding: 13px 14px; border-radius: 13px; font-weight: 700; font-size: 15px; text-align: left;
+    }
+    .menu-item.active, .menu-item:hover {
+      background: linear-gradient(135deg, rgba(211,162,79,.95), rgba(160,112,45,.88));
+      color: #fff;
+    }
+
+    .upload-box {
+      margin-top: 24px; padding: 17px; border-radius: 18px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.10);
+    }
+    .excel-input-core { position: fixed; left: -9999px; top: -9999px; opacity: 0; width: 1px; height: 1px; }
+    .upload-label {
+      display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+      padding: 13px; border-radius: 14px; background: rgba(255,255,255,.14);
+      color: #fff; font-weight: 900; cursor: pointer; user-select: none; margin-bottom: 12px;
+    }
+    .upload-box p { color: #d7dddf; font-size: 13px; line-height: 1.55; margin: 0; }
+    .file-name { display: block; margin-top: 10px; color: #f0d39a; font-size: 12px; line-height: 1.35; font-weight: 800; }
+    .profile { display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 16px; background: rgba(255,255,255,.05); margin-top: 18px; }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.14); display: grid; place-items: center; font-weight: 900; }
+    .profile strong { display: block; font-size: 14px; }
+    .profile small { color: #cbd4d7; font-size: 12px; }
+
+    main { padding: 28px 30px 18px; height: 100vh; overflow-y: auto; }
+    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .title h2 { margin: 0 0 8px; font-size: 30px; letter-spacing: -.7px; }
+    .title p { margin: 0; color: var(--muted); font-size: 15px; font-weight: 700; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+    select, .btn, input[type="number"] {
+      border: 1px solid var(--border); background: #fff; border-radius: 14px;
+      padding: 13px 16px; min-height: 46px; color: #222; font-weight: 800; font-family: inherit;
+    }
+    .btn { cursor: pointer; }
+    .btn.primary { background: var(--dark); color: #fff; border-color: var(--dark); }
+
+    .cards { display: grid; grid-template-columns: repeat(5, minmax(170px, 1fr)); gap: 16px; margin-bottom: 16px; }
+    .card, .panel {
+      background: rgba(255,255,255,.94); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .card { min-height: 160px; padding: 20px 22px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+    .card h3, .panel h3 { margin: 0; font-size: 15px; font-weight: 900; line-height: 1.25; }
+    .sub { color: var(--muted); font-size: 13px; font-weight: 700; margin-top: 4px; }
+    .metric-row { display: grid; grid-template-columns: 58px 1fr; gap: 16px; align-items: center; margin-top: 18px; min-width: 0; }
+    .icon { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; flex: none; }
+    .blue { background: var(--blue-soft); color: var(--blue); }
+    .gold { background: var(--gold-soft); color: #b17a24; }
+    .green { background: var(--green-soft); color: var(--green); }
+    .red { background: var(--red-soft); color: var(--red); }
+    .orange { background: var(--orange-soft); color: var(--orange); }
+    .purple { background: var(--purple-soft); color: var(--purple); }
+    .metric { font-size: 34px; font-weight: 900; line-height: .95; letter-spacing: -1.1px; white-space: nowrap; }
+    .metric.red-text { color: var(--red); }
+    .metric.orange-text { color: var(--orange); }
+    .metric.green-text { color: var(--green); }
+    .metric-note { color: var(--muted); font-size: 12.5px; font-weight: 700; line-height: 1.3; margin-top: 7px; }
+    .formula-note { color: var(--muted); font-size: 11.5px; font-weight: 700; line-height: 1.3; margin-top: 5px; max-height: 46px; overflow: hidden; }
+    .base-tech-editor {
+      display: grid;
+      grid-template-columns: 58px 58px;
+      gap: 5px;
+      margin-top: 4px;
+      width: 122px;
+      max-width: 122px;
+    }
+
+    .base-tech-editor label {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .base-tech-editor span {
+      font-size: 8.5px;
+      font-weight: 900;
+      color: var(--muted);
+      line-height: 1;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .base-tech-editor input {
+      width: 58px;
+      min-width: 58px;
+      max-width: 58px;
+      height: 22px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 1px 2px 1px 4px;
+      font-size: 10.5px;
+      font-weight: 900;
+      background: #fff;
+      color: #111;
+      text-align: center;
+    }
+
+    .compact-base {
+      margin-top: 3px;
+    }
+    .exposure-number { font-size: 28px !important; }
+
+    .grid-main { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .panel { padding: 20px 22px; }
+    .panel-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 16px; }
+    .panel small { color: var(--muted); font-size: 13px; font-weight: 700; }
+    .outline-btn { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; font-weight: 900; cursor: pointer; }
+
+    .flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 26px; }
+    .flow-step { text-align: center; position: relative; }
+    .flow-step:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 27px; color: #888; font-size: 20px; font-weight: 900; }
+    .flow-icon { width: 66px; height: 66px; margin: 0 auto 12px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; }
+    .flow-value { font-size: 24px; font-weight: 900; letter-spacing: -.5px; }
+    .flow-label { margin-top: 7px; color: #5e5e5e; font-size: 12px; line-height: 1.35; font-weight: 750; }
+
+    .bar-list { display: grid; gap: 18px; margin-top: 8px; }
+    .bar-row { display: grid; grid-template-columns: 110px 1fr 48px; gap: 12px; align-items: center; font-size: 14px; font-weight: 800; }
+    .bar-mini { display: grid; gap: 7px; }
+    .bar-bg { height: 12px; background: #eee8df; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 999px; }
+    .bar-fill.required { background: linear-gradient(90deg, #d3a24f, #f2dfb8); }
+    .bar-fill.present { background: linear-gradient(90deg, #3f9c5c, #cde9d1); }
+    .diff, .negative { color: var(--red); font-weight: 900; }
+    .positive { color: var(--green); font-weight: 900; }
+
+    .mini-grid { display: grid; grid-template-columns: 1.25fr .75fr .9fr .9fr .95fr; gap: 14px; margin-bottom: 16px; }
+    .absence-layout { display: grid; grid-template-columns: 116px 1fr; gap: 16px; align-items: center; }
+    .legend { display: grid; gap: 8px; font-size: 12px; color: #4f4f4f; font-weight: 700; }
+    .legend-row { display: flex; justify-content: space-between; gap: 10px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 7px; }
+    .split-metric { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+    .split-box { border: 1px solid var(--border); border-radius: 18px; background: #fbfaf7; padding: 14px 8px; text-align: center; }
+    .split-box .icon { margin: 0 auto 9px; width: 50px; height: 50px; font-size: 22px; }
+    .split-box strong { display: block; font-size: 26px; }
+    .split-box span { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .critical-list { display: grid; gap: 14px; margin: 18px 0; }
+    .critical-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 14px; font-weight: 900; }
+
+    .bottom-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .daily-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+    .daily-table th, .daily-table td { padding: 9px 5px; border-bottom: 1px solid #eee8df; text-align: center; white-space: nowrap; }
+    .daily-table th:first-child, .daily-table td:first-child { text-align: left; font-weight: 900; width: 124px; }
+    .daily-table th:not(:first-child), .daily-table td:not(:first-child) { width: 38px; }
+    .daily-table .future-day { color: #aaa; font-weight: 900; }
+    .daily-table .total-row td { border-top: 2px solid #e7d6bd; background: #fffaf2; font-weight: 900; }
+    .daily-table .neutral { color: #555; font-weight: 900; }
+    .critical-day-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .critical-day-legend span { display:inline-flex; align-items:center; gap:6px; }
+    .legend-chip { width: 10px; height: 10px; border-radius: 99px; display:inline-block; }
+    .appeal-card { display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+    .appeal-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; font-weight: 700; }
+
+
+
+    .absence-section { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+    .absence-chart-panel { min-height: 420px; }
+    .absence-layout-big { display: grid; grid-template-columns: minmax(280px, 420px) 1fr; gap: 28px; align-items: center; }
+    .absence-canvas-wrap { width: min(380px, 100%); margin: 0 auto; }
+    .absence-legend-big { font-size: 14px; gap: 10px; max-width: 480px; }
+    .absence-legend-big .legend-row { border-bottom: 1px solid #eee8df; padding: 7px 0; }
+    .absence-total-box { text-align: right; font-weight: 900; }
+    .absence-total-box span { display: block; font-size: 36px; line-height: 1; }
+    .absence-total-box small { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .absence-table-wrap { overflow: auto; max-height: 430px; border: 1px solid #eee8df; border-radius: 16px; }
+    .absence-detail-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 1120px; }
+    .absence-detail-table th, .absence-detail-table td { padding: 10px 12px; border-bottom: 1px solid #eee8df; text-align: left; white-space: nowrap; }
+    .absence-detail-table th { position: sticky; top: 0; background: #fbfaf7; z-index: 1; font-weight: 900; }
+    .absence-detail-table td:first-child, .absence-detail-table th:first-child { text-align: center; font-weight: 900; }
+    .absence-detail-table tbody tr:hover { background: #fbfaf7; }
+
+
+
+    .quick-analysis-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .quick-box { border: 1px solid #eee8df; border-radius: 16px; overflow: hidden; background: #fff; min-width: 0; }
+    .quick-box-title { padding: 12px 14px; font-weight: 900; font-size: 13px; border-bottom: 1px solid #eee8df; background: #fbfaf7; display:flex; justify-content:space-between; gap:8px; align-items:center; }
+    .quick-box-title .count { color: var(--red); font-weight: 900; }
+    .muted-inline { color: #777; font-size: 11px; font-weight: 800; }
+    .quick-table-wrap { max-height: 360px; overflow: auto; }
+    .quick-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 0; table-layout: auto; }
+    .quick-table th, .quick-table td { padding: 9px 10px; border-bottom: 1px solid #eee8df; text-align: left; white-space: normal; vertical-align: top; }
+    .quick-table th:nth-child(2), .quick-table td:nth-child(2), .quick-table th:nth-child(3), .quick-table td:nth-child(3), .quick-table th:nth-child(4), .quick-table td:nth-child(4), .quick-table th:nth-child(5), .quick-table td:nth-child(5), .quick-table th:nth-child(6), .quick-table td:nth-child(6) { white-space: nowrap; }
+    .quick-table th { position: sticky; top: 0; z-index: 1; background: #fff; font-weight: 900; }
+    .quick-table td:first-child { font-weight: 900; }
+    .quick-note { color: var(--muted); font-size: 11px; font-weight: 700; margin-top: 8px; line-height: 1.35; }
+    .mini-pill { display:inline-flex; align-items:center; justify-content:center; padding: 3px 8px; border-radius: 999px; background: var(--red-soft); color: var(--red); font-weight:900; font-size: 11px; }
+
+    @media (max-width: 1200px) { .quick-analysis-grid { grid-template-columns: 1fr; } }
+
+    @media (max-width: 900px) {
+      .absence-layout-big { grid-template-columns: 1fr; }
+      .absence-total-box { text-align: left; }
+      .absence-canvas-wrap { width: min(320px, 100%); }
+    }
+
+    .footer-note { text-align: center; color: var(--muted); font-size: 12px; padding: 14px 0 0; font-weight: 700; }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(10,15,18,.62); backdrop-filter: blur(7px); display: none; align-items: center; justify-content: center; padding: 18px; }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(520px, 100%); background: #fff; border-radius: 26px; padding: 26px; border: 1px solid var(--border); box-shadow: 0 30px 80px rgba(0,0,0,.22); }
+    .modal h2 { margin: 0 0 8px; font-size: 25px; }
+    .modal p { margin: 0 0 20px; color: var(--muted); font-weight: 700; line-height: 1.55; }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 12px; margin-bottom: 18px; }
+    .modal label { display: grid; gap: 7px; font-size: 13px; font-weight: 900; color: #333; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+    .toast { position: fixed; right: 22px; bottom: 22px; display: none; z-index: 70; background: var(--dark); color: #fff; border-radius: 16px; padding: 14px 18px; font-size: 13px; font-weight: 800; box-shadow: 0 20px 45px rgba(0,0,0,.24); }
+    .toast.show { display: block; }
+
+    @media (max-width: 1280px) {
+      .app { grid-template-columns: 240px 1fr; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .grid-main, .bottom-grid { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { height: auto; position: relative; }
+      .menu { grid-template-columns: repeat(2, 1fr); }
+      main { height: auto; overflow: visible; padding: 18px; }
+      .topbar { flex-direction: column; }
+      .actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+      .actions .primary { grid-column: span 2; }
+      .cards, .mini-grid, .modal-grid { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .flow-step::after { display: none !important; }
+    }
+  
+
+    /* ===== BETA COMPACTA: MISMA ESTRUCTURA, MÁS ORDENADA EN PANTALLA ===== */
+    @media (min-width: 1101px) {
+      .app {
+        grid-template-columns: 240px 1fr;
+      }
+
+      .sidebar {
+        padding: 18px 14px;
+      }
+
+      .brand {
+        margin-bottom: 18px;
+      }
+
+      .logo {
+        width: 46px;
+        height: 46px;
+        font-size: 27px;
+        border-radius: 14px;
+      }
+
+      .brand h1 {
+        font-size: 26px;
+      }
+
+      .brand span {
+        font-size: 11px;
+      }
+
+      .menu {
+        gap: 5px;
+      }
+
+      .menu-item {
+        padding: 10px 12px;
+        font-size: 13.5px;
+      }
+
+      .upload-box {
+        margin-top: 16px;
+        padding: 14px;
+      }
+
+      .upload-label {
+        padding: 11px;
+        font-size: 14px;
+      }
+
+      .upload-box p {
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .profile {
+        padding: 10px;
+      }
+
+      main {
+        padding: 20px 24px 14px;
+      }
+
+      .topbar {
+        margin-bottom: 14px;
+        align-items: center;
+      }
+
+      .title h2 {
+        font-size: 26px;
+        margin-bottom: 5px;
+      }
+
+      .title p {
+        font-size: 13.5px;
+      }
+
+      .actions {
+        gap: 9px;
+      }
+
+      select,
+      .btn,
+      input[type="number"] {
+        min-height: 40px;
+        padding: 9px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      .cards {
+        grid-template-columns: repeat(5, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .card {
+        min-height: 132px;
+        padding: 14px 15px;
+        border-radius: 18px;
+      }
+
+      .base-tech-editor {
+        grid-template-columns: 54px 54px;
+        width: 113px;
+        max-width: 113px;
+      }
+
+      .base-tech-editor input {
+        width: 54px;
+        min-width: 54px;
+        max-width: 54px;
+        height: 21px;
+        font-size: 10px;
+        padding-right: 1px;
+      }
+
+      .card h3,
+      .panel h3 {
+        font-size: 13.5px;
+        line-height: 1.18;
+      }
+
+      .sub {
+        font-size: 11.5px;
+        margin-top: 3px;
+      }
+
+      .metric-row {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+      }
+
+      .metric {
+        font-size: 28px;
+        letter-spacing: -.8px;
+      }
+
+      .metric-note {
+        font-size: 11px;
+        line-height: 1.25;
+        margin-top: 5px;
+      }
+
+      .formula-note {
+        font-size: 10.5px;
+        line-height: 1.25;
+        max-height: 34px;
+      }
+
+      .exposure-number {
+        font-size: 25px !important;
+      }
+
+      .grid-main {
+        grid-template-columns: 1.34fr 1fr;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .panel {
+        padding: 16px 18px;
+        border-radius: 18px;
+      }
+
+      .panel-header {
+        margin-bottom: 10px;
+      }
+
+      .panel small {
+        font-size: 12px;
+      }
+
+      .flow {
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .flow-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+
+      .flow-value {
+        font-size: 21px;
+      }
+
+      .flow-label {
+        font-size: 10.5px;
+        line-height: 1.25;
+      }
+
+      .flow-step:not(:last-child)::after {
+        top: 22px;
+        right: -9px;
+        font-size: 16px;
+      }
+
+      .bar-list {
+        gap: 12px;
+        margin-top: 6px;
+      }
+
+      .bar-row {
+        grid-template-columns: 92px 1fr 42px;
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      .bar-bg {
+        height: 10px;
+      }
+
+      .mini-grid {
+        grid-template-columns: 1.25fr .75fr .9fr .9fr .95fr;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .absence-layout {
+        grid-template-columns: 96px 1fr;
+        gap: 12px;
+      }
+
+      .legend {
+        gap: 6px;
+        font-size: 11px;
+      }
+
+      .split-box {
+        padding: 11px 7px;
+      }
+
+      .split-box .icon {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+      }
+
+      .split-box strong {
+        font-size: 22px;
+      }
+
+      .split-box span {
+        font-size: 10.5px;
+      }
+
+      .critical-list {
+        margin: 12px 0;
+        gap: 10px;
+      }
+
+      .critical-row {
+        font-size: 12px;
+      }
+
+      .outline-btn {
+        padding: 9px 11px;
+        font-size: 12.5px;
+      }
+
+      .bottom-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .daily-table {
+        font-size: 10.8px;
+      }
+
+      .daily-table th,
+      .daily-table td {
+        padding: 6px 5px;
+      }
+
+      .appeal-card {
+        gap: 11px;
+      }
+
+      .appeal-card p {
+        font-size: 11.5px;
+        line-height: 1.45;
+      }
+
+      .footer-note {
+        padding-top: 8px;
+        font-size: 11px;
+      }
+    }
+
+    @media (min-width: 1400px) {
+      .cards {
+        grid-template-columns: repeat(5, minmax(175px, 1fr));
+      }
+
+      .card {
+        min-height: 140px;
+      }
+    }
+  
+
+    /* ===== BLOQUEO VISUAL BETA: NO DESORDENAR TARJETAS CON ZOOM ===== */
+    .cards,
+    .grid-main,
+    .mini-grid,
+    .bottom-grid {
+      min-width: 0;
+    }
+
+    .card,
+    .panel {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .card h3,
+    .panel h3,
+    .sub,
+    .metric-note,
+    .formula-note,
+    .flow-label,
+    .bar-row,
+    .critical-row {
+      overflow-wrap: anywhere;
+    }
+
+    .card .metric-row {
+      min-width: 0;
+    }
+
+    .card .metric-row > div:last-child,
+    .metric-row > div:last-child {
+      min-width: 0;
+    }
+
+    .metric {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #metricStatus,
+    #metricExposure,
+    .exposure-number {
+      font-size: clamp(22px, 1.8vw, 30px) !important;
+      max-width: 100%;
+    }
+
+    .formula-note {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .cards .card {
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .cards .card > div:first-child {
+      min-height: 48px;
+    }
+
+    .cards .metric-row {
+      align-self: end;
+    }
+
+    .dashboard-lock-note {
+      display: none;
+    }
+
+    @media (min-width: 1101px) {
+      .cards {
+        grid-template-columns: repeat(5, minmax(145px, 1fr));
+      }
+
+      .card {
+        min-height: 132px;
+        max-height: 152px;
+      }
+
+      .metric-row {
+        grid-template-columns: 42px minmax(0, 1fr);
+      }
+
+      .icon {
+        width: 42px;
+        height: 42px;
+      }
+
+      .metric {
+        font-size: clamp(25px, 2vw, 31px);
+      }
+
+      .metric-note {
+        font-size: clamp(10px, .82vw, 11.5px);
+      }
+
+      .formula-note {
+        font-size: clamp(9.5px, .78vw, 10.8px);
+      }
+    }
+
+    @media (min-width: 1101px) and (max-width: 1450px) {
+      .app {
+        grid-template-columns: 220px 1fr;
+      }
+
+      main {
+        padding: 18px 20px 12px;
+      }
+
+      .cards {
+        gap: 10px;
+        grid-template-columns: repeat(5, minmax(132px, 1fr));
+      }
+
+      .card {
+        padding: 13px 14px;
+        min-height: 126px;
+        max-height: 146px;
+      }
+
+      .card h3,
+      .panel h3 {
+        font-size: 12.8px;
+      }
+
+      .sub {
+        font-size: 10.8px;
+      }
+
+      .metric-row {
+        grid-template-columns: 38px minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .icon {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
+      }
+
+      .metric {
+        font-size: 25px;
+      }
+
+      .metric-note {
+        font-size: 10px;
+        line-height: 1.18;
+      }
+
+      .formula-note {
+        font-size: 9.5px;
+        line-height: 1.15;
+      }
+
+      .flow-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+
+      .flow-value {
+        font-size: 20px;
+      }
+
+      .flow-label {
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card {
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: 120px;
+      }
+
+      .metric-row {
+        grid-template-columns: 46px minmax(0, 1fr);
+      }
+    }
+
+    .match-panel { margin-top: 16px; }
+    .match-table-wrap { overflow-x: auto; max-height: 520px; border: 1px solid var(--border); border-radius: 16px; }
+    .match-table { width: 100%; border-collapse: collapse; font-size: 12px; background: #fff; }
+    .match-table th { position: sticky; top: 0; background: #fbfaf7; z-index: 1; }
+    .match-table th, .match-table td { padding: 10px 9px; border-bottom: 1px solid #eee8df; text-align: left; white-space: nowrap; }
+    .badge { display: inline-block; padding: 5px 9px; border-radius: 999px; font-weight: 900; font-size: 11px; }
+    .badge.ok { background: var(--green-soft); color: var(--green); }
+    .badge.bad { background: var(--red-soft); color: var(--red); }
+    .badge.partial { background: var(--orange-soft); color: var(--orange); }
+
+
+    /* ===== KPI DIFERENCIA SEPARADO POR TIPO DE DOTACIÓN ===== */
+    .diff-kpi-split {
+      display: grid;
+      gap: 6px;
+      margin-top: 10px;
+      font-weight: 900;
+    }
+    .diff-kpi-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      line-height: 1.15;
+    }
+    .diff-kpi-row span:first-child { color: #555; }
+    .diff-kpi-value { font-size: 18px; font-weight: 950; }
+    .diff-kpi-value.ok { color: var(--green); }
+    .diff-kpi-value.bad { color: var(--red); }
+    .diff-kpi-total {
+      border-top: 1px solid var(--border);
+      padding-top: 6px;
+      margin-top: 2px;
+    }
+
+
+    /* ===== v2.4 Ajuste tarjetas KPI y cargos críticos ===== */
+    .diff-card .metric-row {
+      grid-template-columns: 42px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .diff-card #diffMainIcon {
+      width: 42px;
+      height: 42px;
+      font-size: 18px;
+      align-self: center;
+    }
+    .critical-status-card .metric-row {
+      grid-template-columns: 42px minmax(0, 1fr);
+      align-items: start;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .critical-status-card #metricStatus {
+      font-size: clamp(20px, 1.45vw, 25px) !important;
+      line-height: 1.02;
+      white-space: normal;
+    }
+    .status-detail {
+      display: block;
+      -webkit-line-clamp: initial !important;
+      max-height: none !important;
+      overflow: visible !important;
+      font-size: 11px;
+      line-height: 1.25;
+    }
+    .status-action-list {
+      display: grid;
+      gap: 3px;
+      margin-top: 4px;
+    }
+    .status-action-list span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+
+    /* ===== v1.5 TABLA AUSENCIAS COMPACTA Y ORDENADA ===== */
+    .absence-table-wrap {
+      max-height: 520px;
+      border-radius: 14px;
+    }
+    .absence-detail-table {
+      min-width: 980px;
+      table-layout: fixed;
+      font-size: 11.5px;
+    }
+    .absence-detail-table th,
+    .absence-detail-table td {
+      padding: 7px 8px;
+      line-height: 1.15;
+      vertical-align: middle;
+    }
+    .absence-detail-table th:nth-child(1), .absence-detail-table td:nth-child(1) { width: 190px; }
+    .absence-detail-table th:nth-child(2), .absence-detail-table td:nth-child(2) { width: 105px; }
+    .absence-detail-table th:nth-child(3), .absence-detail-table td:nth-child(3) { width: 86px; text-align: center; }
+    .absence-detail-table th:nth-child(4), .absence-detail-table td:nth-child(4) { width: 88px; text-align: center; }
+    .absence-detail-table th:nth-child(5), .absence-detail-table td:nth-child(5) { width: 96px; text-align: center; }
+    .absence-detail-table th:nth-child(6), .absence-detail-table td:nth-child(6) { width: 112px; text-align: center; }
+    .absence-detail-table th:nth-child(7), .absence-detail-table td:nth-child(7) { width: 62px; text-align: center; }
+    .absence-detail-table th:nth-child(8), .absence-detail-table td:nth-child(8) { width: 78px; text-align: center; }
+    .absence-detail-table th:nth-child(9), .absence-detail-table td:nth-child(9) { width: 140px; }
+    .absence-detail-table td:first-child, .absence-detail-table th:first-child { text-align: left; font-weight: 900; }
+    .absence-detail-table td { overflow: hidden; text-overflow: ellipsis; }
+    .absence-detail-table .cargo-pill {
+      display: inline-block;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: #f7ead2;
+      color: #7d5416;
+      font-size: 10px;
+      font-weight: 900;
+      max-width: 76px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .absence-detail-table .days-strong {
+      display: inline-block;
+      min-width: 30px;
+      padding: 4px 6px;
+      border-radius: 9px;
+      background: #fde6e3;
+      color: #d93d32;
+      font-weight: 900;
+    }
+    .absence-detail-table tbody tr:nth-child(even) { background: rgba(251,250,247,.72); }
+
+
+    /* ===== PÁGINA REEMPLAZOS 48H ===== */
+    .replacements-page { margin-top: 0; min-height: calc(100vh - 52px); }
+    .replacement-header { align-items: center; }
+    .replacement-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .replacement-alert { margin: 8px 0 16px; padding: 13px 16px; border-radius: 14px; border: 1px solid var(--border); background: #fbfaf7; color: #555; font-size: 13px; font-weight: 800; }
+    .replacement-alert.ok { background: var(--green-soft); color: var(--green); border-color: #cde9d1; }
+    .replacement-alert.bad { background: var(--red-soft); color: var(--red); border-color: #f3c1bb; }
+    .replacement-alert.warn { background: var(--orange-soft); color: var(--orange); border-color: #f2d4af; }
+    .replacement-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(145px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .replacement-summary-card { border: 1px solid var(--border); background: #fff; border-radius: 18px; padding: 14px 15px; display: grid; gap: 4px; min-width: 0; }
+    .replacement-summary-card span { color: #555; font-size: 12px; font-weight: 900; }
+    .replacement-summary-card strong { font-size: 30px; line-height: 1; font-weight: 950; }
+    .replacement-summary-card small { color: var(--muted); font-size: 11px; font-weight: 750; line-height: 1.25; }
+    .replacement-summary-card.ok strong { color: var(--green); }
+    .replacement-summary-card.bad strong { color: var(--red); }
+    .replacement-summary-card.warn strong { color: var(--orange); font-size: 25px; }
+    .match-status-legend { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; color: #555; font-size: 12px; font-weight: 850; }
+    .legend-badge { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 6px; vertical-align: -1px; }
+    .legend-badge.ok { background: var(--green); }
+    .legend-badge.bad { background: var(--red); }
+    .legend-badge.partial { background: var(--orange); }
+    .match-table-wrap { max-height: calc(100vh - 330px); }
+    .match-table { font-size: 13px; }
+    .match-table th { font-size: 12px; text-transform: uppercase; letter-spacing: .02em; }
+    .match-table tr.match-ok { background: rgba(229,244,232,.55); }
+    .match-table tr.match-bad { background: rgba(253,230,227,.70); }
+    .match-table tr.match-partial { background: rgba(255,241,223,.70); }
+    .match-table tr:hover { filter: brightness(.985); }
+    @media (max-width: 900px) { .replacement-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .replacement-actions { justify-content: flex-start; } .match-table-wrap { max-height: 62vh; } }
+    @media (max-width: 560px) { .replacement-summary-grid { grid-template-columns: 1fr; } }
+
+
+
+    /* ===== v2.5 Ajuste visual tarjetas superiores ===== */
+    .diff-card { position: relative; }
+    .diff-card .metric-row {
+      display: block !important;
+      margin-top: 2px !important;
+      min-height: 72px;
+      position: relative;
+    }
+    .diff-card #diffMainIcon {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 38px !important;
+      height: 38px !important;
+      font-size: 17px !important;
+      z-index: 0;
+    }
+    .diff-card .diff-kpi-split {
+      margin-left: 58px !important;
+      margin-top: 0 !important;
+      gap: 4px !important;
+      position: relative;
+      z-index: 1;
+    }
+    .diff-card .diff-kpi-row {
+      grid-template-columns: minmax(72px, 1fr) auto !important;
+      font-size: 11.5px !important;
+      gap: 7px !important;
+    }
+    .diff-card .diff-kpi-value { font-size: 17px !important; }
+    .diff-card #metricDiffText { font-size: 10px !important; line-height: 1.1 !important; }
+
+    .critical-status-card .metric-row {
+      grid-template-columns: 34px minmax(0, 1fr) !important;
+      gap: 9px !important;
+      margin-top: 6px !important;
+      align-items: center !important;
+    }
+    .critical-status-card #statusIcon {
+      width: 34px !important;
+      height: 34px !important;
+      font-size: 15px !important;
+    }
+    .critical-status-card #metricStatus {
+      font-size: clamp(16px, 1.15vw, 19px) !important;
+      line-height: .98 !important;
+      letter-spacing: -.4px;
+      white-space: normal !important;
+    }
+    .critical-status-card .status-detail {
+      font-size: 9.8px !important;
+      line-height: 1.14 !important;
+      margin-top: 4px !important;
+      max-height: 46px !important;
+      overflow: hidden !important;
+    }
+    .status-action-title {
+      display: block;
+      font-weight: 950;
+      color: #555;
+      margin-bottom: 2px;
+    }
+    .status-action-list {
+      gap: 2px !important;
+      margin-top: 1px !important;
+    }
+    .status-action-list span {
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      display: block;
+      color: #9b5f10;
+      font-weight: 950;
+    }
+    @media (min-width: 1101px) and (max-width: 1450px) {
+      .critical-status-card #metricStatus { font-size: 16px !important; }
+      .critical-status-card .status-detail { font-size: 9.2px !important; max-height: 42px !important; }
+      .diff-card .diff-kpi-row { font-size: 10.8px !important; }
+      .diff-card .diff-kpi-value { font-size: 16px !important; }
+    }
+
+
+
+    /* ===== v2.7 Ajuste fino: tarjetas superiores centradas y equilibradas ===== */
+    .cards .card {
+      min-height: 155px !important;
+      max-height: none !important;
+      padding: 18px 20px !important;
+      display: grid !important;
+      grid-template-rows: auto 1fr !important;
+      align-items: stretch !important;
+    }
+
+    .cards .card > div:first-child {
+      min-height: 42px !important;
+    }
+
+    .cards .card:not(.diff-card):not(.critical-status-card) .metric-row {
+      margin-top: 0 !important;
+      align-self: center !important;
+      display: grid !important;
+      grid-template-columns: 54px minmax(0, 1fr) !important;
+      gap: 14px !important;
+      align-items: center !important;
+    }
+
+    .cards .card:not(.diff-card):not(.critical-status-card) .icon {
+      width: 54px !important;
+      height: 54px !important;
+      font-size: 23px !important;
+    }
+
+    .cards .card:not(.diff-card):not(.critical-status-card) .metric {
+      font-size: 34px !important;
+      line-height: .95 !important;
+    }
+
+    .cards .card:not(.diff-card):not(.critical-status-card) .metric-note,
+    .cards .card:not(.diff-card):not(.critical-status-card) .formula-note {
+      font-size: 11.5px !important;
+      line-height: 1.22 !important;
+    }
+
+    .cards .card:nth-child(2) .metric-row > div:last-child,
+    .cards .card:nth-child(3) .metric-row > div:last-child {
+      display: grid !important;
+      align-content: center !important;
+    }
+
+    .base-tech-editor {
+      margin-top: 7px !important;
+      width: 132px !important;
+      max-width: 132px !important;
+      grid-template-columns: 62px 62px !important;
+      gap: 8px !important;
+    }
+
+    .base-tech-editor input {
+      width: 62px !important;
+      min-width: 62px !important;
+      max-width: 62px !important;
+      height: 30px !important;
+      font-size: 13px !important;
+      border-radius: 11px !important;
+    }
+
+    .diff-card {
+      min-height: 155px !important;
+    }
+
+    .diff-card .metric-row {
+      display: grid !important;
+      grid-template-columns: 48px minmax(0, 1fr) !important;
+      gap: 14px !important;
+      align-items: center !important;
+      min-height: 88px !important;
+      margin-top: 0 !important;
+      align-self: center !important;
+      position: static !important;
+    }
+
+    .diff-card #diffMainIcon {
+      position: static !important;
+      width: 48px !important;
+      height: 48px !important;
+      font-size: 20px !important;
+      align-self: center !important;
+      z-index: auto !important;
+    }
+
+    .diff-card .diff-kpi-split {
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      gap: 5px !important;
+      align-self: center !important;
+    }
+
+    .diff-card .diff-kpi-row {
+      grid-template-columns: minmax(96px, 1fr) auto !important;
+      font-size: 12px !important;
+      gap: 8px !important;
+      align-items: center !important;
+    }
+
+    .diff-card .diff-kpi-value {
+      font-size: 18px !important;
+      line-height: 1 !important;
+    }
+
+    .diff-card #metricDiffText {
+      font-size: 10.6px !important;
+      line-height: 1.15 !important;
+      max-height: 28px !important;
+    }
+
+    .critical-status-card .metric-row {
+      grid-template-columns: 46px minmax(0, 1fr) !important;
+      gap: 12px !important;
+      align-items: center !important;
+      min-height: 88px !important;
+      margin-top: 0 !important;
+      align-self: center !important;
+    }
+
+    .critical-status-card #statusIcon {
+      width: 46px !important;
+      height: 46px !important;
+      font-size: 18px !important;
+    }
+
+    .critical-status-card #metricStatus {
+      font-size: clamp(18px, 1.25vw, 22px) !important;
+      line-height: .98 !important;
+      max-width: 100% !important;
+    }
+
+    .critical-status-card .status-detail {
+      font-size: 10.4px !important;
+      line-height: 1.18 !important;
+      margin-top: 5px !important;
+      max-height: 52px !important;
+    }
+
+    @media (min-width: 1101px) and (max-width: 1450px) {
+      .cards .card {
+        min-height: 148px !important;
+        padding: 16px 18px !important;
+      }
+      .cards .card:not(.diff-card):not(.critical-status-card) .metric-row {
+        grid-template-columns: 46px minmax(0, 1fr) !important;
+        gap: 11px !important;
+      }
+      .cards .card:not(.diff-card):not(.critical-status-card) .icon {
+        width: 46px !important;
+        height: 46px !important;
+        font-size: 20px !important;
+      }
+      .cards .card:not(.diff-card):not(.critical-status-card) .metric {
+        font-size: 31px !important;
+      }
+      .diff-card .metric-row {
+        grid-template-columns: 42px minmax(0, 1fr) !important;
+        gap: 11px !important;
+      }
+      .diff-card #diffMainIcon,
+      .critical-status-card #statusIcon {
+        width: 42px !important;
+        height: 42px !important;
+      }
+      .diff-card .diff-kpi-row {
+        grid-template-columns: minmax(86px, 1fr) auto !important;
+        font-size: 11px !important;
+      }
+      .critical-status-card #metricStatus {
+        font-size: 17px !important;
+      }
+      .critical-status-card .status-detail {
+        font-size: 9.5px !important;
+      }
+    }
+
+  
+
+    /* ===== V2.7 ESTÁNDAR: AJUSTE REAL DE LAYOUT SIN ZOOM DEL NAVEGADOR ===== */
+    /* Base rígida: no alterar el algoritmo de lectura; solo ajusta la vista para que calce al abrir. */
+    @media (min-width: 1200px) {
+      html, body {
+        width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        zoom: 1;
+      }
+
+      .app {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        overflow: hidden;
+        grid-template-columns: 220px minmax(0, 1fr);
+      }
+
+      .sidebar {
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        position: relative;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 16px 12px;
+      }
+
+      main {
+        height: 100vh;
+        height: 100dvh;
+        min-width: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 18px 18px 12px;
+      }
+
+      .topbar {
+        margin-bottom: 12px;
+      }
+
+      .cards {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .card {
+        min-width: 0;
+        min-height: 124px;
+        max-height: 140px;
+        padding: 13px 14px;
+      }
+
+      .grid-main {
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr);
+        gap: 12px;
+      }
+
+      .panel {
+        min-width: 0;
+      }
+
+      .brand h1 {
+        font-size: 25px;
+      }
+
+      .brand span {
+        font-size: 10.5px;
+        letter-spacing: 2.1px;
+      }
+
+      .menu-item {
+        padding: 10px 11px;
+        font-size: 13.2px;
+      }
+
+      .upload-box {
+        padding: 13px;
+      }
+
+      .upload-label {
+        padding: 10px;
+      }
+
+      .footer-note {
+        padding-bottom: 8px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <input id="excelInput" class="excel-input-core" type="file" accept=".xlsx,.xls,.csv" />
+
+  <div class="modal-backdrop" id="monthModal">
+    <div class="modal">
+      <h2>Antes de procesar el Excel</h2>
+      <p>Indica el mes y año que vamos a analizar. Esta regla es obligatoria para que el cálculo sea correcto.</p>
+      <div class="modal-grid">
+        <label>Mes
+          <select id="modalMonth">
+            <option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril" selected>Abril</option>
+            <option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option>
+            <option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
+          </select>
+        </label>
+        <label>Año <input id="modalYear" type="number" value="2026" min="2020" max="2035" /></label>
+        <label>Hoja del Excel
+          <select id="modalSheet"><option value="__auto__">Detectar automáticamente</option></select>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="cancelProcess" type="button">Cancelar</button>
+        <button class="btn primary" id="processExcel" type="button">Procesar Excel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Listo</div>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div>
+        <div class="brand"><div class="logo">A</div><div><h1>AKRO</h1><span>DOTACIÓN AI</span></div></div>
+        <nav class="menu">
+          <button class="menu-item active" data-page="dashboard">📋 Dashboard</button>
+          <button class="menu-item" data-page="dotacion">👥 Dotación</button>
+          <button class="menu-item" data-page="dashboard">🧑‍🌾 Trabajadores</button>
+          <button class="menu-item" data-page="dashboard">📅 Ausencias</button>
+          <button class="menu-item" data-page="dashboard">🌴 Vacaciones</button>
+          <button class="menu-item" data-page="replacements">🔁 Reemplazos</button>
+          <button class="menu-item" data-page="dashboard">⚠️ Cargos críticos</button>
+          <button class="menu-item" data-page="dashboard">📄 Reportes</button>
+          <button class="menu-item" data-page="dashboard">⚙️ Configuración</button>
+        </nav>
+        <div class="upload-box" id="uploadBox">
+          <label class="upload-label" for="excelInput" id="uploadButton">⬆️ Cargar Excel</label>
+          <p>Arrastra tu archivo aquí o haz clic para seleccionar. Antes de procesar, el sistema preguntará mes y año.</p>
+          <span class="file-name" id="fileName">Sin archivo cargado</span>
+        </div>
+      </div>
+      <div class="profile"><div class="avatar">N</div><div><strong>Nicolás</strong><small>Administrador</small></div></div>
+    </aside>
+
+    <main>
+      <section class="page-section dashboard-page topbar">
+        <div class="title">
+          <h2>Resumen General <span style="font-size:14px;color:var(--gold);vertical-align:middle">BETA v2.8 ESTÁNDAR</span> <select id="sheetQuickSelect" style="font-size:12px;color:#6f6f6f;background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 10px;vertical-align:middle;margin-left:8px;max-width:260px"><option value="">Hoja: —</option></select></h2>
+          <p id="periodText">📅 Sin mes cargado · Cargue un Excel para iniciar el análisis</p>
+        </div>
+        <div class="actions">
+          <select id="periodSelect"><option>Sin archivo</option></select>
+          <button class="btn" type="button">🔎 Filtros</button>
+          <button class="btn" id="refreshDashboardBtn" type="button">🔄 Actualizar</button>
+          <button class="btn primary" id="generateReportBtn" type="button">Generar reporte</button>
+        </div>
+      </section>
+
+      <section class="page-section dashboard-page cards">
+        <article class="card">
+          <div><h3>Trabajadores analizados</h3><div class="sub">Nominal mensual</div></div>
+          <div class="metric-row"><div class="icon blue">👥</div><div><div class="metric" id="metricWorkers">—</div><div class="metric-note">RUT únicos en nómina</div></div></div>
+        </article>
+        <article class="card">
+          <div><h3>Dotación requerida</h3><div class="sub">Base técnica</div></div>
+          <div class="metric-row"><div class="icon gold">📋</div><div><div class="metric" id="metricRequired">228</div><div class="base-tech-editor compact-base"><label><span>Jard.</span><input id="reqGardenersInput" type="number" value="158" min="0"></label><label><span>Esp.</span><input id="reqSpecialistsInput" type="number" value="70" min="0"></label></div></div></div>
+        </article>
+        <article class="card">
+          <div><h3>Dotación presente real</h3><div class="sub">En terreno</div></div>
+          <div class="metric-row"><div class="icon green">✅</div><div><div class="metric" id="metricPresent">—</div><div class="metric-note" id="metricPercent">—% del requerido</div><div class="formula-note" id="presentFormula">Último día analizado: T/ING</div></div></div>
+        </article>
+        <article class="card diff-card">
+          <div><h3>Diferencia vs Base Técnica</h3><div class="sub">Jardineros / Especializados / Total</div></div>
+          <div class="metric-row">
+            <div class="icon red" id="diffMainIcon">↓</div>
+            <div class="diff-kpi-split">
+              <div class="diff-kpi-row"><span>Jardineros</span><strong class="diff-kpi-value" id="metricDiffGardeners">—</strong></div>
+              <div class="diff-kpi-row"><span>Especializados</span><strong class="diff-kpi-value" id="metricDiffSpecialists">—</strong></div>
+              <div class="diff-kpi-row diff-kpi-total"><span>Total</span><strong class="diff-kpi-value" id="metricDiff">—</strong></div>
+              <div class="metric-note" id="metricDiffText">Esperando cálculo</div>
+            </div>
+          </div>
+        </article>
+        <article class="card critical-status-card">
+          <div><h3>Cargos críticos</h3><div class="sub">Brecha por cargo al último día válido</div></div>
+          <div class="metric-row"><div class="icon orange" id="statusIcon">⚠️</div><div><div class="metric orange-text exposure-number" id="metricStatus">—</div><div class="metric-note status-detail" id="metricStatusText">Sin cálculo cargado</div></div></div>
+        </article>
+      </section>
+
+      <section class="page-section dashboard-page grid-main">
+        <article class="panel">
+          <div class="panel-header"><div><h3>Flujo de Dotación</h3><small id="flowPeriod">Esperando carga de Excel</small></div></div>
+          <div class="flow">
+            <div class="flow-step"><div class="flow-icon icon gold">👥</div><div class="flow-value" id="flowBase">228</div><div class="flow-label">Base técnica</div></div>
+            <div class="flow-step"><div class="flow-icon icon gold">🧑‍🌾</div><div class="flow-value" id="flowNominal">—</div><div class="flow-label">Dotación nominal</div></div>
+            <div class="flow-step"><div class="flow-icon icon red">−</div><div class="flow-value" id="flowAbsences">—</div><div class="flow-label">Trabajadores posibles<br>multa por ausencia</div></div>
+            <div class="flow-step"><div class="flow-icon icon green">+</div><div class="flow-value" id="flowReplacements">—</div><div class="flow-label">Ingresos<br>del mes</div></div>
+            <div class="flow-step"><div class="flow-icon icon green">✅</div><div class="flow-value" id="flowPresent">—</div><div class="flow-label">Dotación presente<br>real</div></div>
+            <div class="flow-step"><div class="flow-icon icon red">⚠️</div><div class="flow-value" id="flowFinalDiff" style="color:var(--red)">—</div><div class="flow-label">Diferencia final<br>vs base técnica</div></div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header"><div><h3>Dotación por Cargo</h3><small><span class="dot" style="background:#d3a24f"></span>Requerido <span class="dot" style="background:#3f9c5c;margin-left:12px"></span>Presente</small></div><button class="outline-btn" type="button">Ver detalle</button></div>
+          <div class="bar-list">
+            <div class="bar-row"><span>Jardineros</span><div class="bar-mini"><div class="bar-bg"><div class="bar-fill required" style="width:100%"></div></div><div class="bar-bg"><div id="gardenersBar" class="bar-fill present" style="width:0%"></div></div></div><span id="gardenersDiff" class="diff">—</span></div>
+            <div class="bar-row"><span>Especialistas</span><div class="bar-mini"><div class="bar-bg"><div class="bar-fill required" style="width:100%"></div></div><div class="bar-bg"><div id="specialistsBar" class="bar-fill present" style="width:0%"></div></div></div><span id="specialistsDiff" class="diff">—</span></div>
+            <div class="bar-row" style="border-top:1px solid var(--border);padding-top:14px"><span>Total</span><strong id="cargoTotalText">228 requerido · — presente</strong><span id="totalCargoDiff" class="diff">—</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="page-section dashboard-page absence-section">
+        <article class="panel absence-chart-panel">
+          <div class="panel-header">
+            <div>
+              <h3>Ausencias en el mes</h3>
+              <small>Distribución por tipo de ausencia</small>
+            </div>
+            <div class="absence-total-box"><span id="absenceTotal">—</span><small>Total registros</small></div>
+          </div>
+          <div class="absence-layout-big">
+            <div class="absence-canvas-wrap"><canvas id="absenceChart" width="300" height="300"></canvas></div>
+            <div class="legend absence-legend-big" id="absenceLegend"><div class="legend-row"><span>Sin datos</span><strong>—</strong></div></div>
+          </div>
+        </article>
+
+
+
+        <article class="panel quick-analysis-panel">
+          <div class="panel-header">
+            <div>
+              <h3>Análisis rápido de faltas y ausencias críticas</h3>
+              <small>Lectura automática del Excel hasta el último día válido cargado</small>
+            </div>
+          </div>
+          <div class="quick-analysis-grid">
+            <div class="quick-box">
+              <div class="quick-box-title"><span>⚠️ F continuas ≥2</span><span class="count" id="quickContinuousCount">—</span></div>
+              <div class="quick-table-wrap">
+                <table class="quick-table" id="quickContinuousTable">
+                  <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>F</th><th>Días</th></tr></thead>
+                  <tbody><tr><td colspan="5">Carga un Excel.</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="quick-box">
+              <div class="quick-box-title"><span>📋 F reiteradas no continuas ≥2</span><span class="count" id="quickRepeatedCount">—</span></div>
+              <div class="quick-table-wrap">
+                <table class="quick-table" id="quickRepeatedTable">
+                  <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>F</th><th>Días</th></tr></thead>
+                  <tbody><tr><td colspan="5">Carga un Excel.</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="quick-box">
+              <div class="quick-box-title"><span>🏆 Ranking mayor ausentismo <small class="muted-inline">(sin licencias médicas ni vacaciones)</small></span><span class="count" id="quickRankingCount">Top 10</span></div>
+              <div class="quick-table-wrap">
+                <table class="quick-table" id="quickRankingTable">
+                  <thead><tr><th>#</th><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Días</th><th>Detalle</th></tr></thead>
+                  <tbody><tr><td colspan="6">Carga un Excel.</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="quick-note">Criterio: F/FM se consideran faltas. El ranking de mayor ausentismo excluye licencias médicas, vacaciones, descansos y celdas vacías.</div>
+        </article>
+
+        <article class="panel absence-detail-panel">
+          <div class="panel-header">
+            <div>
+              <h3>Detalle de ausencias por periodo</h3>
+              <small>Primer día de ausencia, último día ausente y retorno del trabajador</small>
+            </div>
+          </div>
+          <div class="absence-table-wrap">
+            <table class="absence-detail-table" id="absenceDetailTable">
+              <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Inicio ausencia</th><th>Último día ausente</th><th>Retorno</th><th>Días</th><th>Códigos</th><th>Causal</th></tr></thead>
+              <tbody><tr><td colspan="9">Carga un Excel para ver los periodos de ausencia.</td></tr></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="page-section dashboard-page bottom-grid">
+        <article class="panel critical-daily-panel" style="overflow-x:auto">
+          <div class="panel-header">
+            <div>
+              <h3>Cargos críticos por día</h3>
+              <small>Déficit/superávit diario por cargo. Días sin análisis: —</small>
+            </div>
+          </div>
+          <table class="daily-table" id="dailyTable">
+            <thead><tr><th>Día</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+            <tbody><tr><td>Jardineros</td><td colspan="10">Sin datos procesados</td></tr><tr><td>Especialistas</td><td colspan="10">Sin datos procesados</td></tr><tr><td>Total vs 228</td><td colspan="10">Sin datos procesados</td></tr></tbody>
+          </table>
+          <div class="critical-day-legend">
+            <span><i class="legend-chip" style="background:#3f9c5c"></i>Verde: sobre base</span>
+            <span><i class="legend-chip" style="background:#d93d32"></i>Rojo: déficit</span>
+            <span><i class="legend-chip" style="background:#aaa"></i>—: día no analizado</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="page-section replacements-page panel match-panel" id="replacementsPage" style="display:none">
+        <div class="panel-header replacement-header">
+          <div>
+            <h3>Match 48H de Reemplazos</h3>
+            <small>Ausente → reemplazo del mismo cargo desde día 3 de ausencia</small>
+          </div>
+          <div class="replacement-actions">
+            <button class="outline-btn" id="showDashboardBtn" type="button">← Volver al dashboard</button>
+            <button class="outline-btn" id="exportMatchBtn" type="button">⬇️ Exportar Match CSV</button>
+          </div>
+        </div>
+
+        <div class="replacement-alert" id="replacementAlert">
+          Carga un Excel para generar el análisis de reemplazos 48H.
+        </div>
+
+        <div class="replacement-summary-grid">
+          <div class="replacement-summary-card"><span>Total evaluados</span><strong id="matchTotal">—</strong><small>Días exigibles desde día 3</small></div>
+          <div class="replacement-summary-card ok"><span>Cubiertos</span><strong id="matchCovered">—</strong><small>Con ingreso/reemplazo mismo cargo</small></div>
+          <div class="replacement-summary-card bad"><span>No cubiertos</span><strong id="matchUncovered">—</strong><small>Sin match detectado</small></div>
+          <div class="replacement-summary-card warn"><span>Exposición estimada</span><strong id="matchExposure">—</strong><small>2 UTM por día no cubierto</small></div>
+        </div>
+
+        <div class="match-status-legend">
+          <span><i class="legend-badge ok"></i> Cubierto 48H</span>
+          <span><i class="legend-badge bad"></i> No cubierto 48H</span>
+          <span><i class="legend-badge partial"></i> Revisar / parcial</span>
+        </div>
+
+        <div class="match-table-wrap">
+          <table class="match-table" id="matchTable">
+            <thead>
+              <tr>
+                <th>Ausente</th><th>RUT</th><th>Cargo</th><th>Inicio</th><th>Día evaluado</th><th>Reemplazo</th><th>RUT reemplazo</th><th>Estado 48H</th>
+              </tr>
+            </thead>
+            <tbody><tr><td colspan="8">Carga un Excel para generar el match.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page-section dotacion-page panel" id="dotacionPage" style="display:none">
+        <div class="panel-header">
+          <div>
+            <h3>Listado Completo de Dotación</h3>
+            <small>Ordenado por antigüedad (del más antiguo al más reciente)</small>
+          </div>
+        </div>
+
+        <div class="replacement-summary-grid">
+          <div class="replacement-summary-card ok">
+            <span>Retención > 1 Año</span>
+            <strong id="kpiOneYearCount">—</strong>
+            <small id="kpiOneYearPct">Calculando...</small>
+          </div>
+          <div class="replacement-summary-card">
+            <span>Total Nómina</span>
+            <strong id="kpiTotalNominal">—</strong>
+            <small>Trabajadores analizados</small>
+          </div>
+        </div>
+
+        <div class="match-table-wrap" style="margin-top: 16px;">
+          <table class="match-table" id="dotacionTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Trabajador</th>
+                <th>RUT</th>
+                <th>Cargo</th>
+                <th>Fecha Ingreso</th>
+                <th>Antigüedad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6">Carga un Excel para ver la dotación.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="footer-note">Los datos presentados son cálculos propios en base a la información del archivo Excel cargado.</div>
+    </main>
+  </div>
+
+  <script>
+    let BASE_REQUIRED = 228;
+    let REQUIRED_GARDENERS = 158;
+    let REQUIRED_SPECIALISTS = 70;
+    const UTM_VALUE = 69751;
+    let pendingFile = null;
+    let pendingWorkbook = null;
+    let currentSummary = null;
+    let currentFileName = '';
+    let absenceChart = null;
+
+    const $ = (id) => document.getElementById(id);
+    const clean = (v) => String(v ?? '').trim();
+    const norm = (v) => clean(v).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const fmt = (n) => Number(n || 0).toLocaleString('es-CL');
+    const clp = (n) => '$' + Number(n || 0).toLocaleString('es-CL');
+    const setText = (id, value) => { const el = $(id); if (el) el.textContent = value; };
+
+
+    function compactCargo(value) {
+      const c = norm(value);
+      if (!c || c === '-') return '-';
+      if (c === 'jardinero' || c.includes('jardinero')) return 'Jard.';
+      if (c.includes('piton')) return 'Pit.';
+      if (c.includes('supervisor')) return 'Sup.';
+      if (c.includes('capataz')) return 'Cap.';
+      if (c.includes('conductor')) return 'Cond.';
+      if (c.includes('podador')) return 'Pod.';
+      if (c.includes('peoneta')) return 'Peon.';
+      if (c.includes('soldador')) return 'Sold.';
+      if (c.includes('albanil') || c.includes('albañil')) return 'Alb.';
+      if (c.includes('gasfiter')) return 'Gasf.';
+      if (c.includes('ayudante')) return 'Ayud.';
+      return clean(value).slice(0, 10);
+    }
+
+    function showToast(message) {
+      const toast = $('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function monthIndex(monthName) {
+      return ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].indexOf(monthName);
+    }
+
+    function looksLikeRut(value) {
+      const t = clean(value).replaceAll('.', '').replaceAll('-', '');
+      if (t.length < 7 || t.length > 10) return false;
+      return (t.match(/[0-9]/g) || []).length >= 7;
+    }
+
+    function hasLetters(value) {
+      return /[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(clean(value));
+    }
+
+    function isInvalidWorkerRow(name, rut, row) {
+      const n = clean(name);
+      const r = clean(rut);
+      const joined = norm((row || []).join(' '));
+      if (joined.includes('total') || joined.includes('resumen') || joined.includes('dotacion requerida')) return true;
+      if (!hasLetters(n)) return true;
+      if (n === r) return true;
+      if (/^[0-9.,\-\s]+$/.test(n)) return true;
+      return false;
+    }
+
+    function normalizeCargo(value) {
+      const c = norm(value);
+      // Regla Nicolás: solo el cargo exactamente "Jardinero" cuenta como jardinero.
+      // Todo lo demás se considera especializado para KPIs y control contractual.
+      if (c === 'jardinero') return 'JARDINERO';
+      return clean(value).toUpperCase() || 'ESPECIALIZADO';
+    }
+
+    function cargoGroup(value) {
+      const c = norm(value);
+      return c === 'jardinero' ? 'Jardinero' : 'Especialista';
+    }
+
+    function isPresent(mark) {
+      const t = norm(mark);
+      return t === 't' || t === 'ing' || t.includes('trabaj') || t.includes('presente');
+    }
+
+    function isIngresado(mark) {
+      const t = norm(mark);
+      return t === 'ing' || t.includes('ingreso');
+    }
+
+    function isRest(mark) {
+      const t = norm(mark);
+      return t === 'd' || t.includes('descanso');
+    }
+
+    function absenceReason(mark) {
+      const raw = clean(mark);
+      const t = norm(raw).replace(/\s+/g, '');
+      if (!t || isPresent(raw)) return '';
+      if (isRest(raw)) return 'Descanso';
+
+      // Mapeo optimizado de códigos usados en asistencia.
+      // Las celdas vacías y días sin cargar no se cuentan como ausencia.
+      if (['v', 'vm', 'vac'].includes(t) || t.includes('vacacion')) return 'Vacaciones';
+      if (['l', 'lm', 'lic', 'licmedica'].includes(t) || t.includes('licencia')) return 'Licencia Médica';
+      if (['f', 'fm', 'falt'].includes(t) || t.includes('falta') || t.includes('inasistencia')) return 'Faltas';
+      if (t.includes('pcg') || t.includes('psg') || t.includes('pcgm') || t.includes('psgm') || t.includes('permiso')) return 'Permisos';
+      if (t.includes('finq') || t.includes('finqm') || t.includes('finiquito') || t.includes('renuncia') || t.includes('baja')) return 'Finiquitos';
+      return 'Otras';
+    }
+
+    function isAbsenceLike(mark) {
+      return absenceReason(mark) !== '';
+    }
+
+    function isSanctionable(mark) {
+      const r = absenceReason(mark);
+      return r && r !== 'Descanso';
+    }
+
+
+
+    function isFaltaMark(mark) {
+      return absenceReason(mark) === 'Faltas';
+    }
+
+    function buildQuickAbsenceAnalysis(workers, analysisLimitDay) {
+      const continuous = [];
+      const repeated = [];
+      const ranking = [];
+
+      workers.forEach(worker => {
+        const fDays = [];
+        const allAbsenceDays = [];
+        const reasonCount = {};
+
+        for (let day = 1; day <= analysisLimitDay; day++) {
+          const mark = worker.marks[day] || '';
+          const reason = absenceReason(mark);
+          if (isFaltaMark(mark)) fDays.push(day);
+          // Ranking operativo: excluye licencias médicas y vacaciones para detectar faltas/reiteraciones gestionables.
+          if (reason && reason !== 'Descanso' && reason !== 'Licencia Médica' && reason !== 'Vacaciones') {
+            allAbsenceDays.push(day);
+            reasonCount[reason] = (reasonCount[reason] || 0) + 1;
+          }
+        }
+
+        const sequences = [];
+        let seq = [];
+        fDays.forEach((day, index) => {
+          if (!seq.length || day === seq[seq.length - 1] + 1) seq.push(day);
+          else { sequences.push(seq); seq = [day]; }
+          if (index === fDays.length - 1) sequences.push(seq);
+        });
+        const continuousSequences = sequences.filter(s => s.length >= 2);
+
+        if (continuousSequences.length) {
+          continuous.push({
+            name: worker.name || worker.id,
+            rut: worker.rut || '',
+            cargo: worker.cargo,
+            f: fDays.length,
+            days: continuousSequences.map(s => s.join(', ')).join(' | '),
+            maxSeq: Math.max(...continuousSequences.map(s => s.length))
+          });
+        } else if (fDays.length >= 2) {
+          repeated.push({
+            name: worker.name || worker.id,
+            rut: worker.rut || '',
+            cargo: worker.cargo,
+            f: fDays.length,
+            days: fDays.join(', ')
+          });
+        }
+
+        if (allAbsenceDays.length) {
+          const detail = Object.entries(reasonCount).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `${k}: ${v}`).join(' · ');
+          ranking.push({
+            name: worker.name || worker.id,
+            rut: worker.rut || '',
+            cargo: worker.cargo,
+            days: allAbsenceDays.length,
+            detail
+          });
+        }
+      });
+
+      continuous.sort((a,b) => b.maxSeq - a.maxSeq || b.f - a.f || String(a.name).localeCompare(String(b.name), 'es'));
+      repeated.sort((a,b) => b.f - a.f || String(a.name).localeCompare(String(b.name), 'es'));
+      ranking.sort((a,b) => b.days - a.days || String(a.name).localeCompare(String(b.name), 'es'));
+
+      return { continuous, repeated, ranking: ranking.slice(0, 10) };
+    }
+
+    function findHeaderRow(table) {
+      let bestIndex = 0;
+      let bestScore = -1;
+      table.slice(0, 25).forEach((row, i) => {
+        const joined = norm(row.join(' '));
+        let score = 0;
+        if (joined.includes('rut') || joined.includes('run')) score += 5;
+        if (joined.includes('nombre')) score += 5;
+        if (joined.includes('cargo')) score += 4;
+        row.forEach(cell => {
+          const n = Number(clean(cell));
+          if (Number.isInteger(n) && n >= 1 && n <= 31) score++;
+        });
+        if (score > bestScore) { bestScore = score; bestIndex = i; }
+      });
+      return bestIndex;
+    }
+
+    function findColumn(headers, names) {
+      const h = headers.map((x, i) => ({ n: norm(x), i }));
+      for (const name of names) {
+        const wanted = norm(name);
+        const exact = h.find(x => x.n === wanted);
+        if (exact) return exact.i;
+        const partial = h.find(x => x.n.includes(wanted));
+        if (partial) return partial.i;
+      }
+      return -1;
+    }
+
+    function cargoCriticalName(value) {
+      const c = normalizeCargo(value);
+      const n = norm(c);
+      if (n === 'jardinero') return 'Jardinero';
+      if (n.includes('orillador')) return 'Orillador';
+      if (n.includes('cortador')) return 'Cortador';
+      if (n.includes('podador')) return 'Podador';
+      if (n.includes('pitonero')) return 'Pitonero';
+      if (n.includes('chofer') || n.includes('conductor')) return 'Chofer';
+      if (n.includes('supervisor')) return 'Supervisor';
+      if (n.includes('encargado') && n.includes('jardineria')) return 'Enc. Jardinería';
+      if (n.includes('equipo de jardineria')) return 'Equipo Jardinería';
+      if (n.includes('albanil')) return 'Albañil';
+      if (n.includes('gasfiter')) return 'Gasfíter';
+      if (n.includes('soldador')) return 'Soldador';
+      if (n.includes('peoneta')) return 'Peoneta';
+      if (n.includes('operador')) return 'Operador';
+      return compactCargo ? compactCargo(c) : c;
+    }
+
+    function buildCriticalCargoActions(workers, lastDay, gardenersDiff, specialistsDiff) {
+      if (!lastDay) return [];
+      const activeByExact = {};
+      workers.forEach(worker => {
+        const mark = worker.marks[lastDay] || '';
+        const reason = absenceReason(mark);
+        if (!reason || reason === 'Descanso') return;
+        const group = worker.group === 'Jardinero' ? 'Jardinero' : 'Especialista';
+        const label = cargoCriticalName(worker.cargo);
+        activeByExact[group] ||= {};
+        activeByExact[group][label] = (activeByExact[group][label] || 0) + 1;
+      });
+
+      const actions = [];
+      const addActions = (group, deficit, fallback) => {
+        let remaining = Math.abs(Math.min(0, deficit));
+        if (!remaining) return;
+        const rows = Object.entries(activeByExact[group] || {}).sort((a, b) => b[1] - a[1]);
+        for (const [label, count] of rows) {
+          if (remaining <= 0) break;
+          const qty = Math.min(count, remaining);
+          actions.push({ qty, cargo: label });
+          remaining -= qty;
+        }
+        if (remaining > 0) actions.push({ qty: remaining, cargo: fallback });
+      };
+
+      addActions('Jardinero', gardenersDiff, 'Jardinero');
+      addActions('Especialista', specialistsDiff, 'Especializado');
+      return actions;
+    }
+
+    function getDayColumns(headers, monthName, year) {
+      const daysInMonth = new Date(year, monthIndex(monthName) + 1, 0).getDate();
+      return headers.map((header, index) => ({ header: clean(header), index }))
+        .filter(x => {
+          const n = Number(x.header);
+          return Number.isInteger(n) && n >= 1 && n <= daysInMonth;
+        })
+        .map(x => ({ index: x.index, day: Number(x.header) }))
+        .sort((a, b) => a.day - b.day);
+    }
+
+    function selectBestSheet(workbook) {
+      let best = null;
+      workbook.SheetNames.forEach((name) => {
+        const table = XLSX.utils.sheet_to_json(workbook.Sheets[name], { header: 1, defval: '', raw: false });
+        const preview = norm(table.slice(0, 30).map(r => r.join(' ')).join(' '));
+        let score = 0;
+        if (preview.includes('maipu zona 6')) score += 1000;
+        if (preview.includes('rut')) score += 100;
+        if (preview.includes('cargo')) score += 100;
+        if (preview.includes('nombre')) score += 80;
+        table.slice(0, 120).forEach(row => row.forEach(cell => {
+          if (looksLikeRut(cell)) score += 5;
+          const n = Number(clean(cell));
+          if (Number.isInteger(n) && n >= 1 && n <= 31) score++;
+        }));
+        if (!best || score > best.score) best = { name, table, score };
+      });
+      return best;
+    }
+
+
+
+    function hasLetters(value) {
+      return /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(clean(value));
+    }
+
+    function parseExcelDateString(str) {
+      if (!str) return null;
+      if (str instanceof Date) return str;
+      const s = String(str).trim();
+      if (!isNaN(Number(s)) && Number(s) > 10000) {
+        return new Date(Math.round((Number(s) - 25569) * 86400 * 1000));
+      }
+      const parts = s.split(/[-/]/);
+      if (parts.length === 3) {
+        let y = parseInt(parts[2], 10);
+        let m = parseInt(parts[1], 10);
+        let d = parseInt(parts[0], 10);
+        if (y < 100) y += 2000;
+        if (y >= 1900 && m >= 1 && m <= 12 && d >= 1 && d <= 31) {
+          return new Date(y, m - 1, d);
+        }
+      }
+      return null;
+    }
+
+    function extractFullName(row, headers, fallbackNameCol) {
+      const fullNameCol = findColumn(headers, ['nombre completo', 'trabajador completo', 'funcionario completo']);
+      if (fullNameCol >= 0) {
+        const full = clean(row[fullNameCol]);
+        if (hasLetters(full)) return full.replace(/\s+/g, ' ').trim();
+      }
+
+      const nameIdx = findColumn(headers, ['nombres', 'nombre', 'trabajador', 'funcionario']);
+      const paternoIdx = findColumn(headers, ['apellido paterno', 'ap paterno', 'paterno', 'primer apellido']);
+      const maternoIdx = findColumn(headers, ['apellido materno', 'ap materno', 'materno', 'segundo apellido']);
+
+      const parts = [];
+      if (nameIdx >= 0) parts.push(clean(row[nameIdx]));
+      if (paternoIdx >= 0) parts.push(clean(row[paternoIdx]));
+      if (maternoIdx >= 0) parts.push(clean(row[maternoIdx]));
+
+      const combined = parts.filter(x => x && hasLetters(x)).join(' ').replace(/\s+/g, ' ').trim();
+      if (combined) return combined;
+
+      const fallback = fallbackNameCol >= 0 ? clean(row[fallbackNameCol]) : '';
+      if (hasLetters(fallback)) return fallback.replace(/\s+/g, ' ').trim();
+      return '';
+    }
+
+    function analyzeTable(table, monthName, year) {
+      const headerIndex = findHeaderRow(table);
+      const headers = table[headerIndex].map(clean);
+      const rows = table.slice(headerIndex + 1).filter(row => row.some(cell => clean(cell) !== ''));
+      const rutCol = findColumn(headers, ['rut', 'run']);
+      const nameCol = findColumn(headers, ['nombre', 'nombres', 'trabajador']);
+      const cargoCol = findColumn(headers, ['cargo', 'funcion']);
+      const dateCol = findColumn(headers, ['ingreso', 'fecha de ingreso', 'f ingreso', 'f_ingreso']);
+      const dayCols = getDayColumns(headers, monthName, year);
+      const daysInMonth = new Date(year, monthIndex(monthName) + 1, 0).getDate();
+
+      const workers = [];
+      const nominal = new Set();
+      const ingresos = new Set();
+      const presentByDay = {};
+      const presentByCargoDay = {};
+      const analyzedDayMarks = {};
+      const replacementByCargoDay = {};
+      const absenceCounts = {};
+      const absenceUniqueByReason = {};
+      const vacationWorkers = new Set();
+      const absenceDetailRows = [];
+      const absencePeriodRows = [];
+      let totalAbsenceMarks = 0;
+      let restMarks = 0;
+
+      rows.forEach((row, idx) => {
+        let rut = rutCol >= 0 ? clean(row[rutCol]) : '';
+        if (!rut) {
+          const possible = row.find(cell => looksLikeRut(cell));
+          if (possible) rut = clean(possible);
+        }
+        const name = extractFullName(row, headers, nameCol);
+        if (!rut && !name) return;
+        if (isInvalidWorkerRow(name, rut, row)) return;
+
+        const cargoRaw = cargoCol >= 0 ? row[cargoCol] : row.join(' ');
+        const hireDateRaw = dateCol >= 0 ? row[dateCol] : '';
+        const hireDate = parseExcelDateString(hireDateRaw);
+        const cargo = normalizeCargo(cargoRaw);
+        const group = cargoGroup(cargoRaw);
+        const id = rut || name || `SIN-ID-${idx + 1}`;
+        const marks = {};
+        nominal.add(id);
+
+        dayCols.forEach(({ index, day }) => {
+          const mark = clean(row[index]);
+          marks[day] = mark;
+          if (!mark) return;
+
+          analyzedDayMarks[day] ||= new Set();
+          analyzedDayMarks[day].add(id);
+          if (isPresent(mark)) {
+            presentByDay[day] ||= new Set();
+            presentByCargoDay[day] ||= { Jardinero: new Set(), Especialista: new Set() };
+            presentByDay[day].add(id);
+            presentByCargoDay[day][group].add(id);
+          }
+
+          if (isIngresado(mark)) {
+            ingresos.add(id);
+            replacementByCargoDay[cargo] ||= {};
+            replacementByCargoDay[cargo][day] ||= [];
+            replacementByCargoDay[cargo][day].push(id);
+          }
+
+          const reason = absenceReason(mark);
+          if (reason) {
+            if (reason === 'Descanso') restMarks++;
+            else {
+              totalAbsenceMarks++;
+              absenceCounts[reason] = (absenceCounts[reason] || 0) + 1;
+              absenceUniqueByReason[reason] ||= new Set();
+              absenceUniqueByReason[reason].add(id);
+              if (reason === 'Vacaciones') vacationWorkers.add(id);
+              absenceDetailRows.push({
+                day,
+                name: name || id,
+                rut,
+                cargo,
+                code: mark,
+                reason
+              });
+            }
+          }
+        });
+
+        workers.push({ id, rut, name, cargo, group, marks, hireDate, hireDateRaw });
+      });
+
+
+      workers.forEach(worker => {
+        let open = null;
+        for (let day = 1; day <= daysInMonth; day++) {
+          const mark = worker.marks[day] || '';
+          const reason = absenceReason(mark);
+          const isRealAbsence = reason && reason !== 'Descanso';
+
+          if (isRealAbsence) {
+            if (!open) {
+              open = { startDay: day, lastAbsentDay: day, codes: [], reasons: new Set() };
+            }
+            open.lastAbsentDay = day;
+            if (mark && !open.codes.includes(mark)) open.codes.push(mark);
+            open.reasons.add(reason);
+            continue;
+          }
+
+          if (open && isPresent(mark)) {
+            const duration = open.lastAbsentDay - open.startDay + 1;
+            absencePeriodRows.push({
+              name: worker.name || worker.id,
+              rut: worker.rut || '',
+              cargo: worker.cargo,
+              startDay: open.startDay,
+              lastAbsentDay: open.lastAbsentDay,
+              returnDay: day,
+              duration,
+              codes: open.codes.join(' / '),
+              reason: Array.from(open.reasons).join(' / ')
+            });
+            open = null;
+          }
+        }
+
+        if (open) {
+          const duration = open.lastAbsentDay - open.startDay + 1;
+          absencePeriodRows.push({
+            name: worker.name || worker.id,
+            rut: worker.rut || '',
+            cargo: worker.cargo,
+            startDay: open.startDay,
+            lastAbsentDay: open.lastAbsentDay,
+            returnDay: 'Sin retorno registrado',
+            duration,
+            codes: open.codes.join(' / '),
+            reason: Array.from(open.reasons).join(' / ')
+          });
+        }
+      });
+
+      const operationalDays = Object.keys(presentByDay)
+        .map(Number)
+        .filter(day => (presentByDay[day]?.size || 0) > 0)
+        .sort((a, b) => a - b);
+
+      // Último día válido operacional:
+      // No se toma la última columna del mes ni días futuros con D, V, L o datos prellenados.
+      // Se toma el último día que tenga al menos un trabajador presente con T o ING.
+      const lastAnalyzedDay = operationalDays.length ? operationalDays[operationalDays.length - 1] : null;
+      const analysisLimitDay = lastAnalyzedDay || 0;
+
+      // Recalcular ausencias solo hasta el último día válido cargado.
+      // Evita que celdas vacías o días futuros del mes caigan como “Otras”.
+      Object.keys(absenceCounts).forEach(k => delete absenceCounts[k]);
+      Object.keys(absenceUniqueByReason).forEach(k => delete absenceUniqueByReason[k]);
+      vacationWorkers.clear();
+      absenceDetailRows.length = 0;
+      absencePeriodRows.length = 0;
+      totalAbsenceMarks = 0;
+      restMarks = 0;
+
+      workers.forEach(worker => {
+        let open = null;
+        for (let day = 1; day <= analysisLimitDay; day++) {
+          const mark = worker.marks[day] || '';
+          const reason = absenceReason(mark);
+          const isRealAbsence = reason && reason !== 'Descanso';
+
+          if (reason === 'Descanso') restMarks++;
+          if (isRealAbsence) {
+            totalAbsenceMarks++;
+            absenceCounts[reason] = (absenceCounts[reason] || 0) + 1;
+            absenceUniqueByReason[reason] ||= new Set();
+            absenceUniqueByReason[reason].add(worker.id);
+            if (reason === 'Vacaciones') vacationWorkers.add(worker.id);
+            absenceDetailRows.push({
+              day,
+              name: worker.name || worker.id,
+              rut: worker.rut || '',
+              cargo: worker.cargo,
+              code: mark,
+              reason
+            });
+
+            if (!open) open = { startDay: day, lastAbsentDay: day, codes: [], reasons: new Set() };
+            open.lastAbsentDay = day;
+            if (mark && !open.codes.includes(mark)) open.codes.push(mark);
+            open.reasons.add(reason);
+            continue;
+          }
+
+          if (open && isPresent(mark)) {
+            const duration = open.lastAbsentDay - open.startDay + 1;
+            absencePeriodRows.push({
+              name: worker.name || worker.id,
+              rut: worker.rut || '',
+              cargo: worker.cargo,
+              startDay: open.startDay,
+              lastAbsentDay: open.lastAbsentDay,
+              returnDay: day,
+              duration,
+              codes: open.codes.join(' / '),
+              reason: Array.from(open.reasons).join(' / ')
+            });
+            open = null;
+          }
+        }
+
+        if (open) {
+          const duration = open.lastAbsentDay - open.startDay + 1;
+          absencePeriodRows.push({
+            name: worker.name || worker.id,
+            rut: worker.rut || '',
+            cargo: worker.cargo,
+            startDay: open.startDay,
+            lastAbsentDay: open.lastAbsentDay,
+            returnDay: 'Sin retorno registrado',
+            duration,
+            codes: open.codes.join(' / '),
+            reason: Array.from(open.reasons).join(' / ')
+          });
+        }
+      });
+
+      const avgPresent = operationalDays.length ? Math.round(operationalDays.reduce((sum, day) => sum + presentByDay[day].size, 0) / operationalDays.length) : 0;
+      const avgGardeners = operationalDays.length ? Math.round(operationalDays.reduce((sum, day) => sum + (presentByCargoDay[day]?.Jardinero?.size || 0), 0) / operationalDays.length) : 0;
+      const avgSpecialists = operationalDays.length ? Math.round(operationalDays.reduce((sum, day) => sum + (presentByCargoDay[day]?.Especialista?.size || 0), 0) / operationalDays.length) : 0;
+
+      const currentPresent = lastAnalyzedDay ? (presentByDay[lastAnalyzedDay]?.size || 0) : 0;
+      const currentGardeners = lastAnalyzedDay ? (presentByCargoDay[lastAnalyzedDay]?.Jardinero?.size || 0) : 0;
+      const currentSpecialists = lastAnalyzedDay ? (presentByCargoDay[lastAnalyzedDay]?.Especialista?.size || 0) : 0;
+      const currentAbsences = lastAnalyzedDay ? Math.max(0, nominal.size - currentPresent) : 0;
+      const totalDiff = currentPresent - BASE_REQUIRED;
+      const gardenersDiff = currentGardeners - REQUIRED_GARDENERS;
+      const specialistsDiff = currentSpecialists - REQUIRED_SPECIALISTS;
+
+      let daysRequireReplacement = 0;
+      let coveredDays = 0;
+      let uncoveredDays = 0;
+      const workersWithUncovered = new Set();
+      const workersWithPotentialFine = new Set();
+      const usedReplacements = {};
+      const reasonSummary = {};
+      const matchRows = [];
+      const workerLookup = Object.fromEntries(workers.map(w => [w.id, w]));
+
+      workers.forEach(worker => {
+        let chain = 0;
+        let absenceStart = null;
+        for (let day = 1; day <= analysisLimitDay; day++) {
+          const mark = worker.marks[day] || '';
+          if (isPresent(mark)) { chain = 0; absenceStart = null; continue; }
+          if (isAbsenceLike(mark)) {
+            chain++;
+            if (chain === 1) absenceStart = day;
+            if (chain >= 3 && isSanctionable(mark)) {
+              workersWithPotentialFine.add(worker.id);
+              daysRequireReplacement++;
+              const reason = absenceReason(mark);
+              reasonSummary[reason] ||= { required: 0, covered: 0, uncovered: 0 };
+              reasonSummary[reason].required++;
+
+              const candidates = replacementByCargoDay[worker.cargo]?.[day] || [];
+              usedReplacements[worker.cargo] ||= {};
+              usedReplacements[worker.cargo][day] ||= new Set();
+              const replacement = candidates.find(id => id !== worker.id && !usedReplacements[worker.cargo][day].has(id));
+
+              const repWorker = replacement ? workerLookup[replacement] : null;
+              if (replacement) {
+                usedReplacements[worker.cargo][day].add(replacement);
+                coveredDays++;
+                reasonSummary[reason].covered++;
+                matchRows.push({
+                  absentName: worker.name || worker.id, absentRut: worker.rut || '', cargo: worker.cargo,
+                  startDay: absenceStart, evalDay: day, replacementName: repWorker?.name || replacement, replacementRut: repWorker?.rut || '', status: 'Cubierto 48H'
+                });
+              } else {
+                uncoveredDays++;
+                workersWithUncovered.add(worker.id);
+                reasonSummary[reason].uncovered++;
+                matchRows.push({
+                  absentName: worker.name || worker.id, absentRut: worker.rut || '', cargo: worker.cargo,
+                  startDay: absenceStart, evalDay: day, replacementName: 'Sin match', replacementRut: '', status: 'No cubierto 48H'
+                });
+              }
+            }
+          }
+        }
+      });
+
+      const exposureUtm = uncoveredDays * 2;
+      const exposureClp = exposureUtm * UTM_VALUE;
+      const quickAbsenceAnalysis = buildQuickAbsenceAnalysis(workers, analysisLimitDay);
+      const criticalCargoActions = buildCriticalCargoActions(workers, lastAnalyzedDay, gardenersDiff, specialistsDiff);
+
+      return {
+        period: `${monthName} ${year}`,
+        monthName,
+        year,
+        daysInMonth,
+        nominal: nominal.size,
+        ingresos: ingresos.size,
+        lastAnalyzedDay,
+        currentPresent,
+        currentAbsences,
+        currentGardeners,
+        currentSpecialists,
+        avgPresent,
+        avgGardeners,
+        avgSpecialists,
+        totalDiff,
+        gardenersDiff,
+        specialistsDiff,
+        totalAbsenceMarks,
+        restMarks,
+        absenceCounts,
+        absenceDetailRows,
+        absencePeriodRows,
+        vacationDays: absenceCounts['Vacaciones'] || 0,
+        vacationWorkers: vacationWorkers.size,
+        daysRequireReplacement,
+        coveredDays,
+        uncoveredDays,
+        workersWithUncovered: workersWithUncovered.size,
+        workersWithPotentialFine: workersWithPotentialFine.size,
+        matchRows,
+        quickAbsenceAnalysis,
+        criticalCargoActions,
+        exposureUtm,
+        exposureClp,
+        presentByDay,
+        presentByCargoDay,
+        reasonSummary,
+        workers
+      };
+    }
+
+    function getRequiredConfig() {
+      const jardineros = Number($('reqGardenersInput')?.value || REQUIRED_GARDENERS || 0);
+      const especialistas = Number($('reqSpecialistsInput')?.value || REQUIRED_SPECIALISTS || 0);
+      REQUIRED_GARDENERS = jardineros;
+      REQUIRED_SPECIALISTS = especialistas;
+      BASE_REQUIRED = jardineros + especialistas;
+      setText('metricRequired', fmt(BASE_REQUIRED));
+      return { jardineros, especialistas, total: BASE_REQUIRED };
+    }
+
+    function updateDashboard(s) {
+      getRequiredConfig();
+      currentSummary = s;
+      setText('periodText', `📅 ${s.period} · Control mensual de dotación contractual`);
+      $('periodSelect').innerHTML = `<option>${s.period}</option>`;
+
+      setText('metricWorkers', fmt(s.nominal));
+      setText('metricPresent', fmt(s.currentPresent));
+      setText('metricPercent', `${BASE_REQUIRED ? ((s.currentPresent / BASE_REQUIRED) * 100).toFixed(1).replace('.', ',') : '0,0'}% del requerido`);
+      setText('presentFormula', `Último día válido ${s.lastAnalyzedDay || '—'}: T/ING ${fmt(s.currentPresent)} · ausencias ${fmt(s.currentAbsences)}`);
+      const formatDiff = (n) => n > 0 ? `+${n}` : `${n}`;
+      const paintDiff = (id, value) => {
+        const el = $(id);
+        if (!el) return;
+        el.textContent = formatDiff(value);
+        el.classList.toggle('ok', value >= 0);
+        el.classList.toggle('bad', value < 0);
+      };
+      paintDiff('metricDiffGardeners', s.gardenersDiff);
+      paintDiff('metricDiffSpecialists', s.specialistsDiff);
+      paintDiff('metricDiff', s.totalDiff);
+      const diffText = s.totalDiff < 0
+        ? 'Déficit total'
+        : (s.gardenersDiff < 0 || s.specialistsDiff < 0 ? 'Cumple total, revisar cargo crítico' : 'Cumple base técnica');
+      setText('metricDiffText', diffText);
+      const diffIcon = $('diffMainIcon');
+      if (diffIcon) {
+        diffIcon.textContent = s.totalDiff < 0 ? '↓' : '✓';
+        diffIcon.className = `icon ${s.totalDiff < 0 ? 'red' : 'green'}`;
+      }
+
+      const hasCargoDeficit = s.gardenersDiff < 0 || s.specialistsDiff < 0;
+      const status = s.totalDiff < 0 ? 'RIESGO' : (hasCargoDeficit ? 'CARGO CRÍTICO' : 'CUMPLE');
+      setText('metricStatus', status);
+      const statusIcon = $('statusIcon');
+      if (statusIcon) {
+        statusIcon.textContent = status === 'CUMPLE' ? '✅' : '⚠️';
+        statusIcon.className = `icon ${status === 'CUMPLE' ? 'green' : (status === 'CARGO CRÍTICO' ? 'orange' : 'red')}`;
+      }
+      const statusTextEl = $('metricStatusText');
+      if (statusTextEl) {
+        if (hasCargoDeficit) {
+          const fallbackActions = [];
+          if (s.gardenersDiff < 0) fallbackActions.push({ qty: Math.abs(s.gardenersDiff), cargo: 'Jardinero' });
+          if (s.specialistsDiff < 0) fallbackActions.push({ qty: Math.abs(s.specialistsDiff), cargo: 'Especializado' });
+          const actions = (s.criticalCargoActions && s.criticalCargoActions.length) ? s.criticalCargoActions : fallbackActions;
+          statusTextEl.innerHTML = '<span class="status-action-title">Falta cubrir:</span><div class="status-action-list">' +
+            actions.slice(0, 3).map(x => `<span>${fmt(x.qty)} ${x.cargo}</span>`).join('') +
+            '</div>';
+        } else if (s.totalDiff < 0) {
+          statusTextEl.innerHTML = `${fmt(s.uncoveredDays)} días no cubiertos · ${fmt(s.exposureUtm)} UTM`;
+        } else {
+          statusTextEl.innerHTML = 'Sin cargo crítico al último día válido';
+        }
+      }
+
+      setText('flowPeriod', `${s.period} · último día válido: ${s.lastAnalyzedDay || '—'}`);
+      setText('flowBase', fmt(BASE_REQUIRED));
+      setText('flowNominal', fmt(s.nominal));
+      setText('flowAbsences', fmt(s.workersWithPotentialFine || 0));
+      setText('flowReplacements', fmt(s.ingresos || 0));
+      setText('flowPresent', fmt(s.currentPresent));
+      setText('flowFinalDiff', s.totalDiff > 0 ? `+${s.totalDiff}` : s.totalDiff);
+
+      const gardenerPct = Math.min(100, (s.currentGardeners / REQUIRED_GARDENERS) * 100);
+      const specialistPct = Math.min(100, (s.currentSpecialists / REQUIRED_SPECIALISTS) * 100);
+      $('gardenersBar').style.width = `${gardenerPct}%`;
+      $('specialistsBar').style.width = `${specialistPct}%`;
+      setText('gardenersDiff', s.gardenersDiff > 0 ? `+${s.gardenersDiff}` : s.gardenersDiff);
+      setText('specialistsDiff', s.specialistsDiff > 0 ? `+${s.specialistsDiff}` : s.specialistsDiff);
+      setText('cargoTotalText', `${fmt(BASE_REQUIRED)} requerido · ${fmt(s.currentPresent)} presente día válido ${s.lastAnalyzedDay || '—'}`);
+      setText('totalCargoDiff', s.totalDiff > 0 ? `+${s.totalDiff}` : s.totalDiff);
+
+      updateAbsenceChart(s);
+      updateQuickAbsenceAnalysis(s);
+      updateAbsenceDetailTable(s);
+      setText('vacationsTaken', fmt(s.vacationDays));
+      setText('vacationsUnique', fmt(s.vacationWorkers));
+      updateCriticalList(s);
+      setText('pendingReplacements', fmt(s.uncoveredDays));
+      setText('itsDiff', '—');
+      setText('itsText', `Propio día ${s.lastAnalyzedDay || '—'}: ${fmt(s.currentPresent)}`);
+      updateDailyTable(s);
+      updateAppealText(s);
+      updateMatchTable(s);
+      renderDotacion(s);
+    }
+
+
+    function renderDotacion(s) {
+      const tbody = document.querySelector('#dotacionTable tbody');
+      if (!tbody) return;
+      if (!s.workers || !s.workers.length) {
+        tbody.innerHTML = '<tr><td colspan="6">Carga un Excel para ver la dotación.</td></tr>';
+        return;
+      }
+
+      const list = s.workers.filter(w => w.name || w.rut);
+      const today = new Date();
+      let oneYearCount = 0;
+
+      list.forEach(w => {
+        if (!w.hireDate) {
+          w.seniorityDays = -1;
+          w.seniorityText = 'Desconocida';
+        } else {
+          const diffTime = Math.abs(today - w.hireDate);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          w.seniorityDays = diffDays;
+          if (diffDays > 365) {
+             oneYearCount++;
+             const years = Math.floor(diffDays / 365);
+             const months = Math.floor((diffDays % 365) / 30);
+             w.seniorityText = years + ' año(s)' + (months > 0 ? ' ' + months + ' mes(es)' : '');
+          } else {
+             const months = Math.floor(diffDays / 30);
+             w.seniorityText = months + ' mes(es)';
+          }
+        }
+      });
+
+      list.sort((a, b) => {
+        if (a.seniorityDays === -1) return 1;
+        if (b.seniorityDays === -1) return -1;
+        return b.seniorityDays - a.seniorityDays;
+      });
+
+      setText('kpiOneYearCount', fmt(oneYearCount));
+      setText('kpiOneYearPct', list.length ? Math.round((oneYearCount/list.length)*100) + '% de la nómina' : '0%');
+      setText('kpiTotalNominal', fmt(list.length));
+
+      tbody.innerHTML = list.map((w, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><strong>${w.name || w.id}</strong></td>
+          <td>${w.rut || '-'}</td>
+          <td><span class="cargo-pill">${compactCargo(w.cargo || '-')}</span></td>
+          <td>${w.hireDateRaw || '-'}</td>
+          <td>${w.seniorityText}</td>
+        </tr>
+      `).join('');
+    }
+
+    function updateMatchTable(s) {
+      const tbody = document.querySelector('#matchTable tbody');
+      if (!tbody) return;
+      const allRows = (s.matchRows || []);
+      const rows = allRows.slice(0, 600);
+      const covered = allRows.filter(r => String(r.status || '').includes('Cubierto')).length;
+      const uncovered = allRows.filter(r => String(r.status || '').includes('No cubierto')).length;
+      const exposure = (s.exposureUtm || 0) + ' UTM / ' + clp(s.exposureClp || 0);
+
+      setText('matchTotal', fmt(allRows.length));
+      setText('matchCovered', fmt(covered));
+      setText('matchUncovered', fmt(uncovered));
+      setText('matchExposure', exposure);
+
+      const alert = $('replacementAlert');
+      if (alert) {
+        alert.className = 'replacement-alert ' + (uncovered > 0 ? 'bad' : covered > 0 ? 'ok' : 'warn');
+        alert.textContent = allRows.length
+          ? `Análisis 48H listo: ${fmt(covered)} cubiertos y ${fmt(uncovered)} no cubiertos. Exposición estimada: ${exposure}.`
+          : 'No se detectaron ausencias que exijan reemplazo desde día 3.';
+      }
+
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="8">No se detectaron ausencias que exijan reemplazo desde día 3.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rows.map(r => {
+        const status = String(r.status || '');
+        const cls = status.includes('Cubierto') ? 'ok' : status.includes('No cubierto') ? 'bad' : 'partial';
+        const rowCls = cls === 'ok' ? 'match-ok' : cls === 'bad' ? 'match-bad' : 'match-partial';
+        return `<tr class="${rowCls}" title="${r.cargo || '-'}">
+          <td><strong>${r.absentName || '-'}</strong></td>
+          <td>${r.absentRut || '-'}</td>
+          <td><span class="cargo-pill">${compactCargo(r.cargo || '-')}</span></td>
+          <td>${r.startDay || '—'}</td>
+          <td><strong>${r.evalDay || '—'}</strong></td>
+          <td>${r.replacementName || '-'}</td>
+          <td>${r.replacementRut || '-'}</td>
+          <td><span class="badge ${cls}">${status || 'Revisar'}</span></td>
+        </tr>`;
+      }).join('');
+    }
+
+    function updateAbsenceChart(s) {
+      const labels = Object.keys(s.absenceCounts);
+      const values = Object.values(s.absenceCounts);
+      const total = values.reduce((a, b) => a + b, 0);
+      setText('absenceTotal', fmt(total));
+      const colors = ['#4e9a9a', '#e0ad62', '#d98245', '#d93d32', '#d8c7a7', '#8b70d6'];
+      $('absenceLegend').innerHTML = labels.length ? labels.map((label, i) => `<div class="legend-row"><span><span class="dot" style="background:${colors[i % colors.length]}"></span>${label}</span><strong>${fmt(values[i])} (${Math.round(values[i] / Math.max(total, 1) * 100)}%)</strong></div>`).join('') : '<div class="legend-row"><span>Sin ausencias</span><strong>0</strong></div>';
+      const ctx = $('absenceChart');
+      if (absenceChart) absenceChart.destroy();
+      absenceChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: { labels: labels.length ? labels : ['Sin datos'], datasets: [{ data: values.length ? values : [1], backgroundColor: values.length ? colors : ['#e8e1d7'], borderWidth: 0 }] },
+        options: { responsive: true, cutout: '62%', plugins: { legend: { display: false } } }
+      });
+    }
+
+
+
+    function updateQuickAbsenceAnalysis(s) {
+      const q = s.quickAbsenceAnalysis || { continuous: [], repeated: [], ranking: [] };
+      setText('quickContinuousCount', q.continuous.length);
+      setText('quickRepeatedCount', q.repeated.length);
+      setText('quickRankingCount', `Top ${Math.min(q.ranking.length || 0, 10)}`);
+
+      const renderBasic = (rows, colspan) => rows.length ? rows.map(r => `
+        <tr title="${r.cargo || '-'}">
+          <td>${r.name || '-'}</td>
+          <td>${r.rut || '-'}</td>
+          <td><span class="cargo-pill">${compactCargo(r.cargo || '-')}</span></td>
+          <td><span class="mini-pill">${r.f || 0}</span></td>
+          <td>${r.days || '-'}</td>
+        </tr>`).join('') : `<tr><td colspan="${colspan}">Sin casos detectados.</td></tr>`;
+
+      const contBody = document.querySelector('#quickContinuousTable tbody');
+      if (contBody) contBody.innerHTML = renderBasic(q.continuous, 5);
+
+      const repBody = document.querySelector('#quickRepeatedTable tbody');
+      if (repBody) repBody.innerHTML = renderBasic(q.repeated, 5);
+
+      const rankBody = document.querySelector('#quickRankingTable tbody');
+      if (rankBody) {
+        rankBody.innerHTML = q.ranking.length ? q.ranking.map((r, i) => `
+          <tr title="${r.cargo || '-'}">
+            <td>${i + 1}</td>
+            <td>${r.name || '-'}</td>
+            <td>${r.rut || '-'}</td>
+            <td><span class="cargo-pill">${compactCargo(r.cargo || '-')}</span></td>
+            <td><span class="days-strong">${r.days || 0}</span></td>
+            <td>${r.detail || '-'}</td>
+          </tr>`).join('') : '<tr><td colspan="6">Sin ausencias registradas.</td></tr>';
+      }
+    }
+
+    function updateAbsenceDetailTable(s) {
+      const table = $('absenceDetailTable');
+      if (!table) return;
+      const rows = s.absencePeriodRows || [];
+      // v1.5: ordenar de mayor a menor duración para priorizar ausencias críticas.
+      const ordered = rows.slice().sort((a, b) =>
+        Number(b.duration || 0) - Number(a.duration || 0) ||
+        Number(a.startDay || 0) - Number(b.startDay || 0) ||
+        String(a.name).localeCompare(String(b.name), 'es')
+      );
+      const body = ordered.length
+        ? ordered.map(r => `<tr title="${r.cargo || '-'}"><td>${r.name || '-'}</td><td>${r.rut || '-'}</td><td><span class="cargo-pill">${compactCargo(r.cargo || '-')}</span></td><td>${r.startDay}</td><td>${r.lastAbsentDay}</td><td>${r.returnDay || 'Sin retorno'}</td><td><span class="days-strong">${r.duration || '-'}</span></td><td><strong>${r.codes || '-'}</strong></td><td>${r.reason || '-'}</td></tr>`).join('')
+        : '<tr><td colspan="9">Sin periodos de ausencia registrados en el mes.</td></tr>';
+      table.innerHTML = '<thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Inicio</th><th>Últ. ausente</th><th>Retorno</th><th>Días</th><th>Cód.</th><th>Causal</th></tr></thead><tbody>' + body + '</tbody>';
+    }
+
+
+    function updateCriticalList(s) {
+      const el = $('criticalList');
+      if (!el) return;
+      const rows = [];
+      if (s.gardenersDiff < 0) rows.push(`<div class="critical-row"><span>⚠️ Jardineros</span><span class="diff">${s.gardenersDiff}</span></div>`);
+      if (s.specialistsDiff < 0) rows.push(`<div class="critical-row"><span>⚠️ Especialistas</span><span class="diff">${s.specialistsDiff}</span></div>`);
+      el.innerHTML = rows.length ? rows.join('') : '<div class="critical-row"><span>✅ Sin cargos críticos</span><span class="positive">Cumple</span></div>';
+    }
+
+    function updateDailyTable(s) {
+      const table = $('dailyTable');
+      if (!table) return;
+      const days = Array.from({ length: Math.min(s.daysInMonth || 31, 31) }, (_, i) => i + 1);
+      const last = Number(s.lastAnalyzedDay || 0);
+      const fmtDiff = (diff) => diff > 0 ? `+${diff}` : String(diff);
+      const clsFor = (diff) => diff < 0 ? 'negative' : diff > 0 ? 'positive' : 'neutral';
+      const cellFor = (day, diff) => {
+        if (!last || day > last || diff === null || diff === undefined || Number.isNaN(diff)) {
+          return '<td class="future-day">—</td>';
+        }
+        return `<td class="${clsFor(diff)}">${fmtDiff(diff)}</td>`;
+      };
+
+      let html = '<thead><tr><th>Día</th>' + days.map(d => `<th>${d}</th>`).join('') + '</tr></thead><tbody>';
+      html += '<tr><td>Jardineros</td>';
+      days.forEach(day => {
+        const present = s.presentByCargoDay[day]?.Jardinero?.size;
+        const diff = present == null ? null : present - REQUIRED_GARDENERS;
+        html += cellFor(day, diff);
+      });
+      html += '</tr>';
+
+      html += '<tr><td>Especialistas</td>';
+      days.forEach(day => {
+        const present = s.presentByCargoDay[day]?.Especialista?.size;
+        const diff = present == null ? null : present - REQUIRED_SPECIALISTS;
+        html += cellFor(day, diff);
+      });
+      html += '</tr>';
+
+      html += '<tr class="total-row"><td>Total vs 228</td>';
+      days.forEach(day => {
+        const present = s.presentByDay?.[day]?.size;
+        const diff = present == null ? null : present - BASE_REQUIRED;
+        html += cellFor(day, diff);
+      });
+      html += '</tr></tbody>';
+      table.innerHTML = html;
+    }
+
+    function updateAppealText(s) {
+      setText('appealText', `Resumen Beta: último día analizado ${s.lastAnalyzedDay}; dotación requerida ${BASE_REQUIRED}; dotación presente real actual ${fmt(s.currentPresent)}; diferencia ${s.totalDiff}; días no cubiertos desde día 3+ ${fmt(s.uncoveredDays)}; exposición estimada ${fmt(s.exposureUtm)} UTM / ${clp(s.exposureClp)}.`);
+    }
+
+    function processSelectedSheet(sheetName) {
+      if (!pendingWorkbook) return showToast('Primero carga un Excel.');
+      const month = $('modalMonth').value;
+      const year = Number($('modalYear').value);
+      const selected = sheetName && sheetName !== '__auto__'
+        ? { name: sheetName, table: XLSX.utils.sheet_to_json(pendingWorkbook.Sheets[sheetName], { header: 1, defval: '', raw: false }) }
+        : selectBestSheet(pendingWorkbook);
+      const summary = analyzeTable(selected.table, month, year);
+      updateDashboard(summary);
+      $('fileName').textContent = `${currentFileName || 'Excel cargado'} · hoja: ${selected.name}`;
+      const quickSheet = $('sheetQuickSelect');
+      if (quickSheet && quickSheet.value !== selected.name) quickSheet.value = selected.name;
+      const modalSheet = $('modalSheet');
+      if (modalSheet && modalSheet.value !== selected.name) modalSheet.value = selected.name;
+      showToast(`Dashboard actualizado: ${selected.name}`);
+    }
+
+    function processFile(file) {
+      if (!file || !window.XLSX) return showToast('No se pudo leer: falta archivo o librería XLSX.');
+      if (pendingWorkbook) {
+        processSelectedSheet($('modalSheet')?.value || '__auto__');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          pendingWorkbook = XLSX.read(new Uint8Array(event.target.result), { type: 'array', cellDates: true });
+          processSelectedSheet($('modalSheet')?.value || '__auto__');
+          
+        } catch (error) {
+          console.error(error);
+          showToast(`Error leyendo Excel: ${error.message}`);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+
+
+    function applyPeriodFromFileName(fileName) {
+      const text = String(fileName || '');
+      const match = text.match(/(\d{2})(\d{2})(\d{4})/);
+      if (!match) return;
+      const monthNumber = Number(match[2]);
+      const yearNumber = Number(match[3]);
+      const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      if (monthNumber >= 1 && monthNumber <= 12) $('modalMonth').value = months[monthNumber - 1];
+      if (yearNumber >= 2020 && yearNumber <= 2035) $('modalYear').value = yearNumber;
+    }
+
+    function prepareExcelFile(file) {
+      if (!file) return;
+      pendingFile = file;
+      currentFileName = file.name;
+      $('fileName').textContent = file.name;
+      applyPeriodFromFileName(file.name);
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          pendingWorkbook = XLSX.read(new Uint8Array(event.target.result), { type: 'array', cellDates: true });
+          const best = selectBestSheet(pendingWorkbook);
+          const sheetSelect = $('modalSheet');
+          if (sheetSelect) {
+            sheetSelect.innerHTML = '<option value="__auto__">Detectar automáticamente</option>' + pendingWorkbook.SheetNames.map(name => `<option value="${name}">${name}</option>`).join('');
+            if (best?.name) sheetSelect.value = best.name;
+          }
+
+          const quickSheet = $('sheetQuickSelect');
+          if (quickSheet) {
+            quickSheet.innerHTML = pendingWorkbook.SheetNames.map(name => `<option value="${name}">Hoja: ${name}</option>`).join('');
+            if (best?.name) quickSheet.value = best.name;
+          }
+          $('monthModal').classList.add('open');
+        } catch (error) {
+          console.error(error);
+          showToast(`Error preparando Excel: ${error.message}`);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    $('excelInput').addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      prepareExcelFile(file);
+    });
+    $('uploadBox').addEventListener('dragover', (e) => { e.preventDefault(); $('uploadBox').style.outline = '2px solid #d3a24f'; });
+    $('uploadBox').addEventListener('dragleave', () => { $('uploadBox').style.outline = 'none'; });
+    $('uploadBox').addEventListener('drop', (e) => {
+      e.preventDefault(); $('uploadBox').style.outline = 'none';
+      const file = e.dataTransfer.files?.[0];
+      prepareExcelFile(file);
+    });
+    $('cancelProcess').addEventListener('click', () => $('monthModal').classList.remove('open'));
+    $('processExcel').addEventListener('click', () => {
+      if (!pendingFile && !pendingWorkbook) return;
+      $('monthModal').classList.remove('open');
+      processSelectedSheet($('modalSheet')?.value || '__auto__');
+    });
+
+    $('sheetQuickSelect').addEventListener('change', (e) => {
+      if (!pendingWorkbook) return showToast('Primero carga un Excel para cambiar de hoja.');
+      processSelectedSheet(e.target.value);
+    });
+    $('copySummaryBtn').addEventListener('click', async () => {
+      if (!currentSummary) return showToast('Primero carga un Excel para generar el resumen.');
+      const s = currentSummary;
+      const text = `AKRO Dotación AI Beta - ${s.period}\n\nDotación requerida: ${BASE_REQUIRED}\nTrabajadores nominales: ${s.nominal}\nDotación presente real actual día ${s.lastAnalyzedDay}: ${s.currentPresent}\nDiferencia vs base técnica actual: ${s.totalDiff}\nAusencias registradas: ${s.totalAbsenceMarks}\nTrabajadores con posible multa por ausencia: ${s.workersWithPotentialFine || 0}
+Días que exigen reemplazo día 3+: ${s.daysRequireReplacement}\nDías cubiertos mismo cargo: ${s.coveredDays}\nDías no cubiertos: ${s.uncoveredDays}\nExposición: ${s.exposureUtm} UTM / ${clp(s.exposureClp)}\n\nRegla: día 1 y 2 no multan; desde día 3+ exige reemplazo; solo T o ING cortan la cadena.`;
+      await navigator.clipboard.writeText(text);
+      showToast('Resumen copiado al portapapeles.');
+    });
+
+    $('refreshDashboardBtn').addEventListener('click', () => {
+      if (!pendingWorkbook) return showToast('Primero carga un Excel.');
+      processSelectedSheet($('sheetQuickSelect')?.value || $('modalSheet')?.value || '__auto__');
+    });
+
+    function showPage(page) {
+      document.querySelectorAll('.dashboard-page').forEach(el => el.style.display = (page === 'dashboard') ? '' : 'none');
+      const rep = $('replacementsPage');
+      if (rep) rep.style.display = (page === 'replacements') ? '' : 'none';
+      const dot = $('dotacionPage');
+      if (dot) dot.style.display = (page === 'dotacion') ? '' : 'none';
+      document.querySelectorAll('.menu-item').forEach(btn => btn.classList.toggle('active', btn.dataset.page === page));
+      const main = document.querySelector('main');
+      if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.menu-item[data-page]').forEach(btn => {
+      btn.addEventListener('click', () => showPage(btn.dataset.page || 'dashboard'));
+    });
+    $('showDashboardBtn')?.addEventListener('click', () => showPage('dashboard'));
+
+    $('exportMatchBtn').addEventListener('click', () => {
+      if (!currentSummary || !currentSummary.matchRows?.length) return showToast('No hay match para exportar.');
+      const headers = ['Ausente','RUT','Cargo','Inicio ausencia','Dia evaluado','Reemplazo','RUT reemplazo','Estado 48H'];
+      const csv = [headers.join(';')].concat(currentSummary.matchRows.map(r => [r.absentName,r.absentRut,r.cargo,r.startDay,r.evalDay,r.replacementName,r.replacementRut,r.status].map(v => `"${String(v ?? '').replaceAll('"','""')}"`).join(';'))).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `match_48h_${currentSummary.period.replaceAll(' ','_')}.csv`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    $('generateReportBtn').addEventListener('click', () => $('copySummaryBtn').click());
+
+    function recalculateWithBaseTech() {
+      getRequiredConfig();
+      if (currentSummary) {
+        currentSummary.totalDiff = currentSummary.currentPresent - BASE_REQUIRED;
+        currentSummary.gardenersDiff = currentSummary.currentGardeners - REQUIRED_GARDENERS;
+        currentSummary.specialistsDiff = currentSummary.currentSpecialists - REQUIRED_SPECIALISTS;
+        updateDashboard(currentSummary);
+        showToast('Base técnica actualizada y dashboard recalculado.');
+      }
+    }
+
+    $('reqGardenersInput').addEventListener('change', recalculateWithBaseTech);
+    $('reqSpecialistsInput').addEventListener('change', recalculateWithBaseTech);
+    $('reqGardenersInput').addEventListener('input', () => setText('metricRequired', fmt(Number($('reqGardenersInput').value || 0) + Number($('reqSpecialistsInput').value || 0))));
+    $('reqSpecialistsInput').addEventListener('input', () => setText('metricRequired', fmt(Number($('reqGardenersInput').value || 0) + Number($('reqSpecialistsInput').value || 0))));
+  </script>
+</body>
+</html>
