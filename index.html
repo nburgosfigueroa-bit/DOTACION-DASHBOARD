@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AKRO Dotación AI - v2.7 Estándar</title>
+  <title>AKRO DotaciÃ³n AI - v2.7 EstÃ¡ndar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -165,7 +165,7 @@
 
     .flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 26px; }
     .flow-step { text-align: center; position: relative; }
-    .flow-step:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 27px; color: #888; font-size: 20px; font-weight: 900; }
+    .flow-step:not(:last-child)::after { content: 'â†’'; position: absolute; right: -12px; top: 27px; color: #888; font-size: 20px; font-weight: 900; }
     .flow-icon { width: 66px; height: 66px; margin: 0 auto 12px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; }
     .flow-value { font-size: 24px; font-weight: 900; letter-spacing: -.5px; }
     .flow-label { margin-top: 7px; color: #5e5e5e; font-size: 12px; line-height: 1.35; font-weight: 750; }
@@ -281,7 +281,7 @@
     }
   
 
-    /* ===== BETA COMPACTA: MISMA ESTRUCTURA, MÁS ORDENADA EN PANTALLA ===== */
+    /* ===== BETA COMPACTA: MISMA ESTRUCTURA, MÃS ORDENADA EN PANTALLA ===== */
     @media (min-width: 1101px) {
       .app {
         grid-template-columns: 240px 1fr;
@@ -795,7 +795,7 @@
     .badge.partial { background: var(--orange-soft); color: var(--orange); }
 
 
-    /* ===== KPI DIFERENCIA SEPARADO POR TIPO DE DOTACIÓN ===== */
+    /* ===== KPI DIFERENCIA SEPARADO POR TIPO DE DOTACIÃ“N ===== */
     .diff-kpi-split {
       display: grid;
       gap: 6px;
@@ -821,7 +821,7 @@
     }
 
 
-    /* ===== v2.4 Ajuste tarjetas KPI y cargos críticos ===== */
+    /* ===== v2.4 Ajuste tarjetas KPI y cargos crÃ­ticos ===== */
     .diff-card .metric-row {
       grid-template-columns: 42px minmax(0, 1fr);
       align-items: center;
@@ -918,7 +918,7 @@
     .absence-detail-table tbody tr:nth-child(even) { background: rgba(251,250,247,.72); }
 
 
-    /* ===== PÁGINA REEMPLAZOS 48H ===== */
+    /* ===== PÃGINA REEMPLAZOS 48H ===== */
     .replacements-page { margin-top: 0; min-height: calc(100vh - 52px); }
     .replacement-header { align-items: center; }
     .replacement-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -1214,8 +1214,8 @@
 
   
 
-    /* ===== V2.7 ESTÁNDAR: AJUSTE REAL DE LAYOUT SIN ZOOM DEL NAVEGADOR ===== */
-    /* Base rígida: no alterar el algoritmo de lectura; solo ajusta la vista para que calce al abrir. */
+    /* ===== V2.7 ESTÃNDAR: AJUSTE REAL DE LAYOUT SIN ZOOM DEL NAVEGADOR ===== */
+    /* Base rÃ­gida: no alterar el algoritmo de lectura; solo ajusta la vista para que calce al abrir. */
     @media (min-width: 1200px) {
       html, body {
         width: 100%;
@@ -1312,7 +1312,7 @@
         window.addEventListener('error', function(e) {
             var el = document.createElement('div');
             el.style = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;padding:20px;z-index:99999;font-size:24px;font-weight:bold;';
-            el.innerHTML = 'ERROR JS: ' + e.message + ' en ' + e.filename + ' l�nea ' + e.lineno;
+            el.innerHTML = 'ERROR JS: ' + e.message + ' en ' + e.filename + ' línea ' + e.lineno;
             document.body.appendChild(el);
         });
         window.addEventListener('unhandledrejection', function(e) {
@@ -1329,7 +1329,7 @@
   <div class="modal-backdrop" id="monthModal">
     <div class="modal">
       <h2>Antes de procesar el Excel</h2>
-      <p>Indica el mes y año que vamos a analizar. Esta regla es obligatoria para que el cálculo sea correcto.</p>
+      <p>Indica el mes y aÃ±o que vamos a analizar. Esta regla es obligatoria para que el cÃ¡lculo sea correcto.</p>
       <div class="modal-grid">
         <label>Mes
           <select id="modalMonth">
@@ -1338,9 +1338,9 @@
             <option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
           </select>
         </label>
-        <label>Año <input id="modalYear" type="number" value="2026" min="2020" max="2035" /></label>
+        <label>AÃ±o <input id="modalYear" type="number" value="2026" min="2020" max="2035" /></label>
         <label>Hoja del Excel
-          <select id="modalSheet"><option value="__auto__">Detectar automáticamente</option></select>
+          <select id="modalSheet"><option value="__auto__">Detectar automÃ¡ticamente</option></select>
         </label>
       </div>
       <div class="modal-actions">
@@ -1355,37 +1355,37 @@
   <div class="app">
     <aside class="sidebar">
       <div>
-        <div class="brand"><div class="logo">A</div><div><h1>AKRO</h1><span>DOTACIÓN AI</span></div></div>
+        <div class="brand"><div class="logo">A</div><div><h1>AKRO</h1><span>DOTACIÃ“N AI</span></div></div>
         <nav class="menu">
-          <button class="menu-item active" data-page="dashboard">📋 Dashboard</button>
-          <button class="menu-item" data-page="dotacion">👥 Dotación</button>
-          <button class="menu-item" data-page="trabajadores">🧑‍🌾 Trabajadores</button>
-          <button class="menu-item" data-page="ausencias">📅 Ausencias</button>
-          <button class="menu-item" data-page="vacaciones">🌴 Vacaciones</button>
-          <button class="menu-item" data-page="replacements">🔁 Reemplazos</button>
-          <button class="menu-item" data-page="criticos">⚠️ Cargos críticos</button>
-          <button class="menu-item" data-page="dashboard">📄 Reportes</button>
-          <button class="menu-item" data-page="dashboard">⚙️ Configuración</button>
+          <button class="menu-item active" data-page="dashboard">ðŸ“‹ Dashboard</button>
+          <button class="menu-item" data-page="dotacion">ðŸ‘¥ DotaciÃ³n</button>
+          <button class="menu-item" data-page="trabajadores">ðŸ§‘â€ðŸŒ¾ Trabajadores</button>
+          <button class="menu-item" data-page="ausencias">ðŸ“… Ausencias</button>
+          <button class="menu-item" data-page="vacaciones">ðŸŒ´ Vacaciones</button>
+          <button class="menu-item" data-page="replacements">ðŸ” Reemplazos</button>
+          <button class="menu-item" data-page="criticos">âš ï¸ Cargos crÃ­ticos</button>
+          <button class="menu-item" data-page="dashboard">ðŸ“„ Reportes</button>
+          <button class="menu-item" data-page="dashboard">âš™ï¸ ConfiguraciÃ³n</button>
         </nav>
         <div class="upload-box" id="uploadBox">
-          <label class="upload-label" for="excelInput" id="uploadButton">⬆️ Cargar Excel</label>
-          <p>Arrastra tu archivo aquí o haz clic para seleccionar. Antes de procesar, el sistema preguntará mes y año.</p>
+          <label class="upload-label" for="excelInput" id="uploadButton">â¬†ï¸ Cargar Excel</label>
+          <p>Arrastra tu archivo aquÃ­ o haz clic para seleccionar. Antes de procesar, el sistema preguntarÃ¡ mes y aÃ±o.</p>
           <span class="file-name" id="fileName">Sin archivo cargado</span>
         </div>
       </div>
-      <div class="profile"><div class="avatar">N</div><div><strong>Nicolás</strong><small>Administrador</small></div></div>
+      <div class="profile"><div class="avatar">N</div><div><strong>NicolÃ¡s</strong><small>Administrador</small></div></div>
     </aside>
 
     <main>
       <section class="page-section dashboard-page topbar">
         <div class="title">
-          <h2>Resumen General <span style="font-size:14px;color:var(--gold);vertical-align:middle">BETA v2.8 ESTÁNDAR</span> <select id="sheetQuickSelect" style="font-size:12px;color:#6f6f6f;background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 10px;vertical-align:middle;margin-left:8px;max-width:260px"><option value="">Hoja: —</option></select></h2>
-          <p id="periodText">📅 Sin mes cargado · Cargue un Excel para iniciar el análisis</p>
+          <h2>Resumen General <span style="font-size:14px;color:var(--gold);vertical-align:middle">BETA v2.8 ESTÃNDAR</span> <select id="sheetQuickSelect" style="font-size:12px;color:#6f6f6f;background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 10px;vertical-align:middle;margin-left:8px;max-width:260px"><option value="">Hoja: â€”</option></select></h2>
+          <p id="periodText">ðŸ“… Sin mes cargado Â· Cargue un Excel para iniciar el anÃ¡lisis</p>
         </div>
         <div class="actions">
           <select id="periodSelect"><option>Sin archivo</option></select>
-          <button class="btn" type="button">🔎 Filtros</button>
-          <button class="btn" id="refreshDashboardBtn" type="button">🔄 Actualizar</button>
+          <button class="btn" type="button">ðŸ”Ž Filtros</button>
+          <button class="btn" id="refreshDashboardBtn" type="button">ðŸ”„ Actualizar</button>
           <button class="btn primary" id="generateReportBtn" type="button">Generar reporte</button>
         </div>
       </section>
@@ -1393,53 +1393,53 @@
       <section class="page-section dashboard-page cards">
         <article class="card">
           <div><h3>Trabajadores analizados</h3><div class="sub">Nominal mensual</div></div>
-          <div class="metric-row"><div class="icon blue">👥</div><div><div class="metric" id="metricWorkers">—</div><div class="metric-note">RUT únicos en nómina</div></div></div>
+          <div class="metric-row"><div class="icon blue">ðŸ‘¥</div><div><div class="metric" id="metricWorkers">â€”</div><div class="metric-note">RUT Ãºnicos en nÃ³mina</div></div></div>
         </article>
         <article class="card">
-          <div><h3>Dotación requerida</h3><div class="sub">Base técnica</div></div>
-          <div class="metric-row"><div class="icon gold">📋</div><div><div class="metric" id="metricRequired">228</div><div class="base-tech-editor compact-base"><label><span>Jard.</span><input id="reqGardenersInput" type="number" value="158" min="0"></label><label><span>Esp.</span><input id="reqSpecialistsInput" type="number" value="70" min="0"></label></div></div></div>
+          <div><h3>DotaciÃ³n requerida</h3><div class="sub">Base tÃ©cnica</div></div>
+          <div class="metric-row"><div class="icon gold">ðŸ“‹</div><div><div class="metric" id="metricRequired">228</div><div class="base-tech-editor compact-base"><label><span>Jard.</span><input id="reqGardenersInput" type="number" value="158" min="0"></label><label><span>Esp.</span><input id="reqSpecialistsInput" type="number" value="70" min="0"></label></div></div></div>
         </article>
         <article class="card">
-          <div><h3>Dotación presente real</h3><div class="sub">En terreno</div></div>
-          <div class="metric-row"><div class="icon green">✅</div><div><div class="metric" id="metricPresent">—</div><div class="metric-note" id="metricPercent">—% del requerido</div><div class="formula-note" id="presentFormula">Último día analizado: T/ING</div></div></div>
+          <div><h3>DotaciÃ³n presente real</h3><div class="sub">En terreno</div></div>
+          <div class="metric-row"><div class="icon green">âœ…</div><div><div class="metric" id="metricPresent">â€”</div><div class="metric-note" id="metricPercent">â€”% del requerido</div><div class="formula-note" id="presentFormula">Ãšltimo dÃ­a analizado: T/ING</div></div></div>
         </article>
         <article class="card diff-card">
-          <div><h3>Diferencia vs Base Técnica</h3><div class="sub">Jardineros / Especializados / Total</div></div>
+          <div><h3>Diferencia vs Base TÃ©cnica</h3><div class="sub">Jardineros / Especializados / Total</div></div>
           <div class="metric-row">
-            <div class="icon red" id="diffMainIcon">↓</div>
+            <div class="icon red" id="diffMainIcon">â†“</div>
             <div class="diff-kpi-split">
-              <div class="diff-kpi-row"><span>Jardineros</span><strong class="diff-kpi-value" id="metricDiffGardeners">—</strong></div>
-              <div class="diff-kpi-row"><span>Especializados</span><strong class="diff-kpi-value" id="metricDiffSpecialists">—</strong></div>
-              <div class="diff-kpi-row diff-kpi-total"><span>Total</span><strong class="diff-kpi-value" id="metricDiff">—</strong></div>
-              <div class="metric-note" id="metricDiffText">Esperando cálculo</div>
+              <div class="diff-kpi-row"><span>Jardineros</span><strong class="diff-kpi-value" id="metricDiffGardeners">â€”</strong></div>
+              <div class="diff-kpi-row"><span>Especializados</span><strong class="diff-kpi-value" id="metricDiffSpecialists">â€”</strong></div>
+              <div class="diff-kpi-row diff-kpi-total"><span>Total</span><strong class="diff-kpi-value" id="metricDiff">â€”</strong></div>
+              <div class="metric-note" id="metricDiffText">Esperando cÃ¡lculo</div>
             </div>
           </div>
         </article>
         <article class="card critical-status-card">
-          <div><h3>Cargos críticos</h3><div class="sub">Brecha por cargo al último día válido</div></div>
-          <div class="metric-row"><div class="icon orange" id="statusIcon">⚠️</div><div><div class="metric orange-text exposure-number" id="metricStatus">—</div><div class="metric-note status-detail" id="metricStatusText">Sin cálculo cargado</div></div></div>
+          <div><h3>Cargos crÃ­ticos</h3><div class="sub">Brecha por cargo al Ãºltimo dÃ­a vÃ¡lido</div></div>
+          <div class="metric-row"><div class="icon orange" id="statusIcon">âš ï¸</div><div><div class="metric orange-text exposure-number" id="metricStatus">â€”</div><div class="metric-note status-detail" id="metricStatusText">Sin cÃ¡lculo cargado</div></div></div>
         </article>
       </section>
 
       <section class="page-section dashboard-page grid-main">
         <article class="panel">
-          <div class="panel-header"><div><h3>Flujo de Dotación</h3><small id="flowPeriod">Esperando carga de Excel</small></div></div>
+          <div class="panel-header"><div><h3>Flujo de DotaciÃ³n</h3><small id="flowPeriod">Esperando carga de Excel</small></div></div>
           <div class="flow">
-            <div class="flow-step"><div class="flow-icon icon gold">👥</div><div class="flow-value" id="flowBase">228</div><div class="flow-label">Base técnica</div></div>
-            <div class="flow-step"><div class="flow-icon icon gold">🧑‍🌾</div><div class="flow-value" id="flowNominal">—</div><div class="flow-label">Dotación nominal</div></div>
-            <div class="flow-step"><div class="flow-icon icon red">−</div><div class="flow-value" id="flowAbsences">—</div><div class="flow-label">Trabajadores posibles<br>multa por ausencia</div></div>
-            <div class="flow-step"><div class="flow-icon icon green">+</div><div class="flow-value" id="flowReplacements">—</div><div class="flow-label">Ingresos<br>del mes</div></div>
-            <div class="flow-step"><div class="flow-icon icon green">✅</div><div class="flow-value" id="flowPresent">—</div><div class="flow-label">Dotación presente<br>real</div></div>
-            <div class="flow-step"><div class="flow-icon icon red">⚠️</div><div class="flow-value" id="flowFinalDiff" style="color:var(--red)">—</div><div class="flow-label">Diferencia final<br>vs base técnica</div></div>
+            <div class="flow-step"><div class="flow-icon icon gold">ðŸ‘¥</div><div class="flow-value" id="flowBase">228</div><div class="flow-label">Base tÃ©cnica</div></div>
+            <div class="flow-step"><div class="flow-icon icon gold">ðŸ§‘â€ðŸŒ¾</div><div class="flow-value" id="flowNominal">â€”</div><div class="flow-label">DotaciÃ³n nominal</div></div>
+            <div class="flow-step"><div class="flow-icon icon red">âˆ’</div><div class="flow-value" id="flowAbsences">â€”</div><div class="flow-label">Trabajadores posibles<br>multa por ausencia</div></div>
+            <div class="flow-step"><div class="flow-icon icon green">+</div><div class="flow-value" id="flowReplacements">â€”</div><div class="flow-label">Ingresos<br>del mes</div></div>
+            <div class="flow-step"><div class="flow-icon icon green">âœ…</div><div class="flow-value" id="flowPresent">â€”</div><div class="flow-label">DotaciÃ³n presente<br>real</div></div>
+            <div class="flow-step"><div class="flow-icon icon red">âš ï¸</div><div class="flow-value" id="flowFinalDiff" style="color:var(--red)">â€”</div><div class="flow-label">Diferencia final<br>vs base tÃ©cnica</div></div>
           </div>
         </article>
 
         <article class="panel">
-          <div class="panel-header"><div><h3>Dotación por Cargo</h3><small><span class="dot" style="background:#d3a24f"></span>Requerido <span class="dot" style="background:#3f9c5c;margin-left:12px"></span>Presente</small></div><button class="outline-btn" type="button">Ver detalle</button></div>
+          <div class="panel-header"><div><h3>DotaciÃ³n por Cargo</h3><small><span class="dot" style="background:#d3a24f"></span>Requerido <span class="dot" style="background:#3f9c5c;margin-left:12px"></span>Presente</small></div><button class="outline-btn" type="button">Ver detalle</button></div>
           <div class="bar-list">
-            <div class="bar-row"><span>Jardineros</span><div class="bar-mini"><div class="bar-bg"><div class="bar-fill required" style="width:100%"></div></div><div class="bar-bg"><div id="gardenersBar" class="bar-fill present" style="width:0%"></div></div></div><span id="gardenersDiff" class="diff">—</span></div>
-            <div class="bar-row"><span>Especialistas</span><div class="bar-mini"><div class="bar-bg"><div class="bar-fill required" style="width:100%"></div></div><div class="bar-bg"><div id="specialistsBar" class="bar-fill present" style="width:0%"></div></div></div><span id="specialistsDiff" class="diff">—</span></div>
-            <div class="bar-row" style="border-top:1px solid var(--border);padding-top:14px"><span>Total</span><strong id="cargoTotalText">228 requerido · — presente</strong><span id="totalCargoDiff" class="diff">—</span></div>
+            <div class="bar-row"><span>Jardineros</span><div class="bar-mini"><div class="bar-bg"><div class="bar-fill required" style="width:100%"></div></div><div class="bar-bg"><div id="gardenersBar" class="bar-fill present" style="width:0%"></div></div></div><span id="gardenersDiff" class="diff">â€”</span></div>
+            <div class="bar-row"><span>Especialistas</span><div class="bar-mini"><div class="bar-bg"><div class="bar-fill required" style="width:100%"></div></div><div class="bar-bg"><div id="specialistsBar" class="bar-fill present" style="width:0%"></div></div></div><span id="specialistsDiff" class="diff">â€”</span></div>
+            <div class="bar-row" style="border-top:1px solid var(--border);padding-top:14px"><span>Total</span><strong id="cargoTotalText">228 requerido Â· â€” presente</strong><span id="totalCargoDiff" class="diff">â€”</span></div>
           </div>
         </article>
       </section>
@@ -1449,13 +1449,13 @@
           <div class="panel-header">
             <div>
               <h3>Ausencias en el mes</h3>
-              <small>Distribución por tipo de ausencia</small>
+              <small>DistribuciÃ³n por tipo de ausencia</small>
             </div>
-            <div class="absence-total-box"><span id="absenceTotal">—</span><small>Total registros</small></div>
+            <div class="absence-total-box"><span id="absenceTotal">â€”</span><small>Total registros</small></div>
           </div>
           <div class="absence-layout-big">
             <div class="absence-canvas-wrap"><canvas id="absenceChart" width="300" height="300"></canvas></div>
-            <div class="legend absence-legend-big" id="absenceLegend"><div class="legend-row"><span>Sin datos</span><strong>—</strong></div></div>
+            <div class="legend absence-legend-big" id="absenceLegend"><div class="legend-row"><span>Sin datos</span><strong>â€”</strong></div></div>
           </div>
         </article>
 
@@ -1464,52 +1464,52 @@
         <article class="panel quick-analysis-panel">
           <div class="panel-header">
             <div>
-              <h3>Análisis rápido de faltas y ausencias críticas</h3>
-              <small>Lectura automática del Excel hasta el último día válido cargado</small>
+              <h3>AnÃ¡lisis rÃ¡pido de faltas y ausencias crÃ­ticas</h3>
+              <small>Lectura automÃ¡tica del Excel hasta el Ãºltimo dÃ­a vÃ¡lido cargado</small>
             </div>
           </div>
           <div class="quick-analysis-grid">
             <div class="quick-box">
-              <div class="quick-box-title"><span>⚠️ F continuas ≥2</span><span class="count" id="quickContinuousCount">—</span></div>
+              <div class="quick-box-title"><span>âš ï¸ F continuas â‰¥2</span><span class="count" id="quickContinuousCount">â€”</span></div>
               <div class="quick-table-wrap">
                 <table class="quick-table" id="quickContinuousTable">
-                  <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>F</th><th>Días</th></tr></thead>
+                  <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>F</th><th>DÃ­as</th></tr></thead>
                   <tbody><tr><td colspan="5">Carga un Excel.</td></tr></tbody>
                 </table>
               </div>
             </div>
             <div class="quick-box">
-              <div class="quick-box-title"><span>📋 F reiteradas no continuas ≥2</span><span class="count" id="quickRepeatedCount">—</span></div>
+              <div class="quick-box-title"><span>ðŸ“‹ F reiteradas no continuas â‰¥2</span><span class="count" id="quickRepeatedCount">â€”</span></div>
               <div class="quick-table-wrap">
                 <table class="quick-table" id="quickRepeatedTable">
-                  <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>F</th><th>Días</th></tr></thead>
+                  <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>F</th><th>DÃ­as</th></tr></thead>
                   <tbody><tr><td colspan="5">Carga un Excel.</td></tr></tbody>
                 </table>
               </div>
             </div>
             <div class="quick-box">
-              <div class="quick-box-title"><span>🏆 Ranking mayor ausentismo <small class="muted-inline">(sin licencias médicas ni vacaciones)</small></span><span class="count" id="quickRankingCount">Top 10</span></div>
+              <div class="quick-box-title"><span>ðŸ† Ranking mayor ausentismo <small class="muted-inline">(sin licencias mÃ©dicas ni vacaciones)</small></span><span class="count" id="quickRankingCount">Top 10</span></div>
               <div class="quick-table-wrap">
                 <table class="quick-table" id="quickRankingTable">
-                  <thead><tr><th>#</th><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Días</th><th>Detalle</th></tr></thead>
+                  <thead><tr><th>#</th><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>DÃ­as</th><th>Detalle</th></tr></thead>
                   <tbody><tr><td colspan="6">Carga un Excel.</td></tr></tbody>
                 </table>
               </div>
             </div>
           </div>
-          <div class="quick-note">Criterio: F/FM se consideran faltas. El ranking de mayor ausentismo excluye licencias médicas, vacaciones, descansos y celdas vacías.</div>
+          <div class="quick-note">Criterio: F/FM se consideran faltas. El ranking de mayor ausentismo excluye licencias mÃ©dicas, vacaciones, descansos y celdas vacÃ­as.</div>
         </article>
 
         <article class="panel absence-detail-panel">
           <div class="panel-header">
             <div>
               <h3>Detalle de ausencias por periodo</h3>
-              <small>Primer día de ausencia, último día ausente y retorno del trabajador</small>
+              <small>Primer dÃ­a de ausencia, Ãºltimo dÃ­a ausente y retorno del trabajador</small>
             </div>
           </div>
           <div class="absence-table-wrap">
             <table class="absence-detail-table" id="absenceDetailTable">
-              <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Inicio ausencia</th><th>Último día ausente</th><th>Retorno</th><th>Días</th><th>Códigos</th><th>Causal</th></tr></thead>
+              <thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Inicio ausencia</th><th>Ãšltimo dÃ­a ausente</th><th>Retorno</th><th>DÃ­as</th><th>CÃ³digos</th><th>Causal</th></tr></thead>
               <tbody><tr><td colspan="9">Carga un Excel para ver los periodos de ausencia.</td></tr></tbody>
             </table>
           </div>
@@ -1520,18 +1520,18 @@
         <article class="panel critical-daily-panel" style="overflow-x:auto">
           <div class="panel-header">
             <div>
-              <h3>Cargos críticos por día</h3>
-              <small>Déficit/superávit diario por cargo. Días sin análisis: —</small>
+              <h3>Cargos crÃ­ticos por dÃ­a</h3>
+              <small>DÃ©ficit/superÃ¡vit diario por cargo. DÃ­as sin anÃ¡lisis: â€”</small>
             </div>
           </div>
           <table class="daily-table" id="dailyTable">
-            <thead><tr><th>Día</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+            <thead><tr><th>DÃ­a</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
             <tbody><tr><td>Jardineros</td><td colspan="10">Sin datos procesados</td></tr><tr><td>Especialistas</td><td colspan="10">Sin datos procesados</td></tr><tr><td>Total vs 228</td><td colspan="10">Sin datos procesados</td></tr></tbody>
           </table>
           <div class="critical-day-legend">
             <span><i class="legend-chip" style="background:#3f9c5c"></i>Verde: sobre base</span>
-            <span><i class="legend-chip" style="background:#d93d32"></i>Rojo: déficit</span>
-            <span><i class="legend-chip" style="background:#aaa"></i>—: día no analizado</span>
+            <span><i class="legend-chip" style="background:#d93d32"></i>Rojo: dÃ©ficit</span>
+            <span><i class="legend-chip" style="background:#aaa"></i>â€”: dÃ­a no analizado</span>
           </div>
         </article>
       </section>
@@ -1540,23 +1540,23 @@
         <div class="panel-header replacement-header">
           <div>
             <h3>Match 48H de Reemplazos</h3>
-            <small>Ausente → reemplazo del mismo cargo desde día 3 de ausencia</small>
+            <small>Ausente â†’ reemplazo del mismo cargo desde dÃ­a 3 de ausencia</small>
           </div>
           <div class="replacement-actions">
-            <button class="outline-btn" id="showDashboardBtn" type="button">← Volver al dashboard</button>
-            <button class="outline-btn" id="exportMatchBtn" type="button">⬇️ Exportar Match CSV</button>
+            <button class="outline-btn" id="showDashboardBtn" type="button">â† Volver al dashboard</button>
+            <button class="outline-btn" id="exportMatchBtn" type="button">â¬‡ï¸ Exportar Match CSV</button>
           </div>
         </div>
 
         <div class="replacement-alert" id="replacementAlert">
-          Carga un Excel para generar el análisis de reemplazos 48H.
+          Carga un Excel para generar el anÃ¡lisis de reemplazos 48H.
         </div>
 
         <div class="replacement-summary-grid">
-          <div class="replacement-summary-card"><span>Total evaluados</span><strong id="matchTotal">—</strong><small>Días exigibles desde día 3</small></div>
-          <div class="replacement-summary-card ok"><span>Cubiertos</span><strong id="matchCovered">—</strong><small>Con ingreso/reemplazo mismo cargo</small></div>
-          <div class="replacement-summary-card bad"><span>No cubiertos</span><strong id="matchUncovered">—</strong><small>Sin match detectado</small></div>
-          <div class="replacement-summary-card warn"><span>Exposición estimada</span><strong id="matchExposure">—</strong><small>2 UTM por día no cubierto</small></div>
+          <div class="replacement-summary-card"><span>Total evaluados</span><strong id="matchTotal">â€”</strong><small>DÃ­as exigibles desde dÃ­a 3</small></div>
+          <div class="replacement-summary-card ok"><span>Cubiertos</span><strong id="matchCovered">â€”</strong><small>Con ingreso/reemplazo mismo cargo</small></div>
+          <div class="replacement-summary-card bad"><span>No cubiertos</span><strong id="matchUncovered">â€”</strong><small>Sin match detectado</small></div>
+          <div class="replacement-summary-card warn"><span>ExposiciÃ³n estimada</span><strong id="matchExposure">â€”</strong><small>2 UTM por dÃ­a no cubierto</small></div>
         </div>
 
         <div class="match-status-legend">
@@ -1569,7 +1569,7 @@
           <table class="match-table" id="matchTable">
             <thead>
               <tr>
-                <th>Ausente</th><th>RUT</th><th>Cargo</th><th>Inicio</th><th>Día evaluado</th><th>Reemplazo</th><th>RUT reemplazo</th><th>Estado 48H</th>
+                <th>Ausente</th><th>RUT</th><th>Cargo</th><th>Inicio</th><th>DÃ­a evaluado</th><th>Reemplazo</th><th>RUT reemplazo</th><th>Estado 48H</th>
               </tr>
             </thead>
             <tbody><tr><td colspan="8">Carga un Excel para generar el match.</td></tr></tbody>
@@ -1580,20 +1580,20 @@
       <section class="page-section dotacion-page panel" id="dotacionPage" style="display:none">
         <div class="panel-header">
           <div>
-            <h3>Listado Completo de Dotación</h3>
-            <small>Ordenado por antigüedad (del más antiguo al más reciente)</small>
+            <h3>Listado Completo de DotaciÃ³n</h3>
+            <small>Ordenado por antigÃ¼edad (del mÃ¡s antiguo al mÃ¡s reciente)</small>
           </div>
         </div>
 
         <div class="replacement-summary-grid">
           <div class="replacement-summary-card ok">
-            <span>Retención > 1 Año</span>
-            <strong id="kpiOneYearCount">—</strong>
+            <span>RetenciÃ³n > 1 AÃ±o</span>
+            <strong id="kpiOneYearCount">â€”</strong>
             <small id="kpiOneYearPct">Calculando...</small>
           </div>
           <div class="replacement-summary-card">
-            <span>Total Nómina</span>
-            <strong id="kpiTotalNominal">—</strong>
+            <span>Total NÃ³mina</span>
+            <strong id="kpiTotalNominal">â€”</strong>
             <small>Trabajadores analizados</small>
           </div>
         </div>
@@ -1607,17 +1607,17 @@
                 <th>RUT</th>
                 <th>Cargo</th>
                 <th>Fecha Ingreso</th>
-                <th>Antigüedad</th>
+                <th>AntigÃ¼edad</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td colspan="6">Carga un Excel para ver la dotación.</td></tr>
+              <tr><td colspan="6">Carga un Excel para ver la dotaciÃ³n.</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <div class="footer-note">Los datos presentados son cálculos propios en base a la información del archivo Excel cargado.</div>
+      <div class="footer-note">Los datos presentados son cÃ¡lculos propios en base a la informaciÃ³n del archivo Excel cargado.</div>
     </main>
   </div>
 
@@ -1651,7 +1651,7 @@
       if (c.includes('podador')) return 'Pod.';
       if (c.includes('peoneta')) return 'Peon.';
       if (c.includes('soldador')) return 'Sold.';
-      if (c.includes('albanil') || c.includes('albañil')) return 'Alb.';
+      if (c.includes('albanil') || c.includes('albaÃ±il')) return 'Alb.';
       if (c.includes('gasfiter')) return 'Gasf.';
       if (c.includes('ayudante')) return 'Ayud.';
       return clean(value).slice(0, 10);
@@ -1675,7 +1675,7 @@
     }
 
     function hasLetters(value) {
-      return /[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(clean(value));
+      return /[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã±]/.test(clean(value));
     }
 
     function isInvalidWorkerRow(name, rut, row) {
@@ -1691,8 +1691,8 @@
 
     function normalizeCargo(value) {
       const c = norm(value);
-      // Regla Nicolás: solo el cargo exactamente "Jardinero" cuenta como jardinero.
-      // Todo lo demás se considera especializado para KPIs y control contractual.
+      // Regla NicolÃ¡s: solo el cargo exactamente "Jardinero" cuenta como jardinero.
+      // Todo lo demÃ¡s se considera especializado para KPIs y control contractual.
       if (c === 'jardinero') return 'JARDINERO';
       return clean(value).toUpperCase() || 'ESPECIALIZADO';
     }
@@ -1723,10 +1723,10 @@
       if (!t || isPresent(raw)) return '';
       if (isRest(raw)) return 'Descanso';
 
-      // Mapeo optimizado de códigos usados en asistencia.
-      // Las celdas vacías y días sin cargar no se cuentan como ausencia.
+      // Mapeo optimizado de cÃ³digos usados en asistencia.
+      // Las celdas vacÃ­as y dÃ­as sin cargar no se cuentan como ausencia.
       if (['v', 'vm', 'vac'].includes(t) || t.includes('vacacion')) return 'Vacaciones';
-      if (['l', 'lm', 'lic', 'licmedica'].includes(t) || t.includes('licencia')) return 'Licencia Médica';
+      if (['l', 'lm', 'lic', 'licmedica'].includes(t) || t.includes('licencia')) return 'Licencia MÃ©dica';
       if (['f', 'fm', 'falt'].includes(t) || t.includes('falta') || t.includes('inasistencia')) return 'Faltas';
       if (t.includes('pcg') || t.includes('psg') || t.includes('pcgm') || t.includes('psgm') || t.includes('permiso')) return 'Permisos';
       if (t.includes('finq') || t.includes('finqm') || t.includes('finiquito') || t.includes('renuncia') || t.includes('baja')) return 'Finiquitos';
@@ -1762,8 +1762,8 @@
           const mark = worker.marks[day] || '';
           const reason = absenceReason(mark);
           if (isFaltaMark(mark)) fDays.push(day);
-          // Ranking operativo: excluye licencias médicas y vacaciones para detectar faltas/reiteraciones gestionables.
-          if (reason && reason !== 'Descanso' && reason !== 'Licencia Médica' && reason !== 'Vacaciones') {
+          // Ranking operativo: excluye licencias mÃ©dicas y vacaciones para detectar faltas/reiteraciones gestionables.
+          if (reason && reason !== 'Descanso' && reason !== 'Licencia MÃ©dica' && reason !== 'Vacaciones') {
             allAbsenceDays.push(day);
             reasonCount[reason] = (reasonCount[reason] || 0) + 1;
           }
@@ -1798,7 +1798,7 @@
         }
 
         if (allAbsenceDays.length) {
-          const detail = Object.entries(reasonCount).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `${k}: ${v}`).join(' · ');
+          const detail = Object.entries(reasonCount).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `${k}: ${v}`).join(' Â· ');
           ranking.push({
             name: worker.name || worker.id,
             rut: worker.rut || '',
@@ -1856,10 +1856,10 @@
       if (n.includes('pitonero')) return 'Pitonero';
       if (n.includes('chofer') || n.includes('conductor')) return 'Chofer';
       if (n.includes('supervisor')) return 'Supervisor';
-      if (n.includes('encargado') && n.includes('jardineria')) return 'Enc. Jardinería';
-      if (n.includes('equipo de jardineria')) return 'Equipo Jardinería';
-      if (n.includes('albanil')) return 'Albañil';
-      if (n.includes('gasfiter')) return 'Gasfíter';
+      if (n.includes('encargado') && n.includes('jardineria')) return 'Enc. JardinerÃ­a';
+      if (n.includes('equipo de jardineria')) return 'Equipo JardinerÃ­a';
+      if (n.includes('albanil')) return 'AlbaÃ±il';
+      if (n.includes('gasfiter')) return 'GasfÃ­ter';
       if (n.includes('soldador')) return 'Soldador';
       if (n.includes('peoneta')) return 'Peoneta';
       if (n.includes('operador')) return 'Operador';
@@ -1932,7 +1932,7 @@
 
 
     function hasLetters(value) {
-      return /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(clean(value));
+      return /[A-Za-zÃÃ‰ÃÃ“ÃšÃœÃ‘Ã¡Ã©Ã­Ã³ÃºÃ¼Ã±]/.test(clean(value));
     }
 
     function parseExcelDateString(str) {
@@ -2125,14 +2125,14 @@
         .filter(day => (presentByDay[day]?.size || 0) > 0)
         .sort((a, b) => a - b);
 
-      // Último día válido operacional:
-      // No se toma la última columna del mes ni días futuros con D, V, L o datos prellenados.
-      // Se toma el último día que tenga al menos un trabajador presente con T o ING.
+      // Ãšltimo dÃ­a vÃ¡lido operacional:
+      // No se toma la Ãºltima columna del mes ni dÃ­as futuros con D, V, L o datos prellenados.
+      // Se toma el Ãºltimo dÃ­a que tenga al menos un trabajador presente con T o ING.
       const lastAnalyzedDay = operationalDays.length ? operationalDays[operationalDays.length - 1] : null;
       const analysisLimitDay = lastAnalyzedDay || 0;
 
-      // Recalcular ausencias solo hasta el último día válido cargado.
-      // Evita que celdas vacías o días futuros del mes caigan como “Otras”.
+      // Recalcular ausencias solo hasta el Ãºltimo dÃ­a vÃ¡lido cargado.
+      // Evita que celdas vacÃ­as o dÃ­as futuros del mes caigan como â€œOtrasâ€.
       Object.keys(absenceCounts).forEach(k => delete absenceCounts[k]);
       Object.keys(absenceUniqueByReason).forEach(k => delete absenceUniqueByReason[k]);
       vacationWorkers.clear();
@@ -2330,13 +2330,13 @@
     function updateDashboard(s) {
       getRequiredConfig();
       currentSummary = s;
-      setText('periodText', `📅 ${s.period} · Control mensual de dotación contractual`);
+      setText('periodText', `ðŸ“… ${s.period} Â· Control mensual de dotaciÃ³n contractual`);
       $('periodSelect').innerHTML = `<option>${s.period}</option>`;
 
       setText('metricWorkers', fmt(s.nominal));
       setText('metricPresent', fmt(s.currentPresent));
       setText('metricPercent', `${BASE_REQUIRED ? ((s.currentPresent / BASE_REQUIRED) * 100).toFixed(1).replace('.', ',') : '0,0'}% del requerido`);
-      setText('presentFormula', `Último día válido ${s.lastAnalyzedDay || '—'}: T/ING ${fmt(s.currentPresent)} · ausencias ${fmt(s.currentAbsences)}`);
+      setText('presentFormula', `Ãšltimo dÃ­a vÃ¡lido ${s.lastAnalyzedDay || 'â€”'}: T/ING ${fmt(s.currentPresent)} Â· ausencias ${fmt(s.currentAbsences)}`);
       const formatDiff = (n) => n > 0 ? `+${n}` : `${n}`;
       const paintDiff = (id, value) => {
         const el = $(id);
@@ -2349,22 +2349,22 @@
       paintDiff('metricDiffSpecialists', s.specialistsDiff);
       paintDiff('metricDiff', s.totalDiff);
       const diffText = s.totalDiff < 0
-        ? 'Déficit total'
-        : (s.gardenersDiff < 0 || s.specialistsDiff < 0 ? 'Cumple total, revisar cargo crítico' : 'Cumple base técnica');
+        ? 'DÃ©ficit total'
+        : (s.gardenersDiff < 0 || s.specialistsDiff < 0 ? 'Cumple total, revisar cargo crÃ­tico' : 'Cumple base tÃ©cnica');
       setText('metricDiffText', diffText);
       const diffIcon = $('diffMainIcon');
       if (diffIcon) {
-        diffIcon.textContent = s.totalDiff < 0 ? '↓' : '✓';
+        diffIcon.textContent = s.totalDiff < 0 ? 'â†“' : 'âœ“';
         diffIcon.className = `icon ${s.totalDiff < 0 ? 'red' : 'green'}`;
       }
 
       const hasCargoDeficit = s.gardenersDiff < 0 || s.specialistsDiff < 0;
-      const status = s.totalDiff < 0 ? 'RIESGO' : (hasCargoDeficit ? 'CARGO CRÍTICO' : 'CUMPLE');
+      const status = s.totalDiff < 0 ? 'RIESGO' : (hasCargoDeficit ? 'CARGO CRÃTICO' : 'CUMPLE');
       setText('metricStatus', status);
       const statusIcon = $('statusIcon');
       if (statusIcon) {
-        statusIcon.textContent = status === 'CUMPLE' ? '✅' : '⚠️';
-        statusIcon.className = `icon ${status === 'CUMPLE' ? 'green' : (status === 'CARGO CRÍTICO' ? 'orange' : 'red')}`;
+        statusIcon.textContent = status === 'CUMPLE' ? 'âœ…' : 'âš ï¸';
+        statusIcon.className = `icon ${status === 'CUMPLE' ? 'green' : (status === 'CARGO CRÃTICO' ? 'orange' : 'red')}`;
       }
       const statusTextEl = $('metricStatusText');
       if (statusTextEl) {
@@ -2377,13 +2377,13 @@
             actions.slice(0, 3).map(x => `<span>${fmt(x.qty)} ${x.cargo}</span>`).join('') +
             '</div>';
         } else if (s.totalDiff < 0) {
-          statusTextEl.innerHTML = `${fmt(s.uncoveredDays)} días no cubiertos · ${fmt(s.exposureUtm)} UTM`;
+          statusTextEl.innerHTML = `${fmt(s.uncoveredDays)} dÃ­as no cubiertos Â· ${fmt(s.exposureUtm)} UTM`;
         } else {
-          statusTextEl.innerHTML = 'Sin cargo crítico al último día válido';
+          statusTextEl.innerHTML = 'Sin cargo crÃ­tico al Ãºltimo dÃ­a vÃ¡lido';
         }
       }
 
-      setText('flowPeriod', `${s.period} · último día válido: ${s.lastAnalyzedDay || '—'}`);
+      setText('flowPeriod', `${s.period} Â· Ãºltimo dÃ­a vÃ¡lido: ${s.lastAnalyzedDay || 'â€”'}`);
       setText('flowBase', fmt(BASE_REQUIRED));
       setText('flowNominal', fmt(s.nominal));
       setText('flowAbsences', fmt(s.workersWithPotentialFine || 0));
@@ -2397,7 +2397,7 @@
       $('specialistsBar').style.width = `${specialistPct}%`;
       setText('gardenersDiff', s.gardenersDiff > 0 ? `+${s.gardenersDiff}` : s.gardenersDiff);
       setText('specialistsDiff', s.specialistsDiff > 0 ? `+${s.specialistsDiff}` : s.specialistsDiff);
-      setText('cargoTotalText', `${fmt(BASE_REQUIRED)} requerido · ${fmt(s.currentPresent)} presente día válido ${s.lastAnalyzedDay || '—'}`);
+      setText('cargoTotalText', `${fmt(BASE_REQUIRED)} requerido Â· ${fmt(s.currentPresent)} presente dÃ­a vÃ¡lido ${s.lastAnalyzedDay || 'â€”'}`);
       setText('totalCargoDiff', s.totalDiff > 0 ? `+${s.totalDiff}` : s.totalDiff);
 
       updateAbsenceChart(s);
@@ -2407,8 +2407,8 @@
       setText('vacationsUnique', fmt(s.vacationWorkers));
       updateCriticalList(s);
       setText('pendingReplacements', fmt(s.uncoveredDays));
-      setText('itsDiff', '—');
-      setText('itsText', `Propio día ${s.lastAnalyzedDay || '—'}: ${fmt(s.currentPresent)}`);
+      setText('itsDiff', 'â€”');
+      setText('itsText', `Propio dÃ­a ${s.lastAnalyzedDay || 'â€”'}: ${fmt(s.currentPresent)}`);
       updateDailyTable(s);
       updateAppealText(s);
       updateMatchTable(s);
@@ -2420,7 +2420,7 @@
       const tbody = document.querySelector('#dotacionTable tbody');
       if (!tbody) return;
       if (!s.workers || !s.workers.length) {
-        tbody.innerHTML = '<tr><td colspan="6">Carga un Excel para ver la dotación.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6">Carga un Excel para ver la dotaciÃ³n.</td></tr>';
         return;
       }
 
@@ -2440,7 +2440,7 @@
              oneYearCount++;
              const years = Math.floor(diffDays / 365);
              const months = Math.floor((diffDays % 365) / 30);
-             w.seniorityText = years + ' año(s)' + (months > 0 ? ' ' + months + ' mes(es)' : '');
+             w.seniorityText = years + ' aÃ±o(s)' + (months > 0 ? ' ' + months + ' mes(es)' : '');
           } else {
              const months = Math.floor(diffDays / 30);
              w.seniorityText = months + ' mes(es)';
@@ -2455,7 +2455,7 @@
       });
 
       setText('kpiOneYearCount', fmt(oneYearCount));
-      setText('kpiOneYearPct', list.length ? Math.round((oneYearCount/list.length)*100) + '% de la nómina' : '0%');
+      setText('kpiOneYearPct', list.length ? Math.round((oneYearCount/list.length)*100) + '% de la nÃ³mina' : '0%');
       setText('kpiTotalNominal', fmt(list.length));
 
       tbody.innerHTML = list.map((w, idx) => `
@@ -2488,12 +2488,12 @@
       if (alert) {
         alert.className = 'replacement-alert ' + (uncovered > 0 ? 'bad' : covered > 0 ? 'ok' : 'warn');
         alert.textContent = allRows.length
-          ? `Análisis 48H listo: ${fmt(covered)} cubiertos y ${fmt(uncovered)} no cubiertos. Exposición estimada: ${exposure}.`
-          : 'No se detectaron ausencias que exijan reemplazo desde día 3.';
+          ? `AnÃ¡lisis 48H listo: ${fmt(covered)} cubiertos y ${fmt(uncovered)} no cubiertos. ExposiciÃ³n estimada: ${exposure}.`
+          : 'No se detectaron ausencias que exijan reemplazo desde dÃ­a 3.';
       }
 
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="8">No se detectaron ausencias que exijan reemplazo desde día 3.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8">No se detectaron ausencias que exijan reemplazo desde dÃ­a 3.</td></tr>';
         return;
       }
       tbody.innerHTML = rows.map(r => {
@@ -2504,8 +2504,8 @@
           <td><strong>${r.absentName || '-'}</strong></td>
           <td>${r.absentRut || '-'}</td>
           <td><span class="cargo-pill">${compactCargo(r.cargo || '-')}</span></td>
-          <td>${r.startDay || '—'}</td>
-          <td><strong>${r.evalDay || '—'}</strong></td>
+          <td>${r.startDay || 'â€”'}</td>
+          <td><strong>${r.evalDay || 'â€”'}</strong></td>
           <td>${r.replacementName || '-'}</td>
           <td>${r.replacementRut || '-'}</td>
           <td><span class="badge ${cls}">${status || 'Revisar'}</span></td>
@@ -2570,7 +2570,7 @@
       const table = $('absenceDetailTable');
       if (!table) return;
       const rows = s.absencePeriodRows || [];
-      // v1.5: ordenar de mayor a menor duración para priorizar ausencias críticas.
+      // v1.5: ordenar de mayor a menor duraciÃ³n para priorizar ausencias crÃ­ticas.
       const ordered = rows.slice().sort((a, b) =>
         Number(b.duration || 0) - Number(a.duration || 0) ||
         Number(a.startDay || 0) - Number(b.startDay || 0) ||
@@ -2579,7 +2579,7 @@
       const body = ordered.length
         ? ordered.map(r => `<tr title="${r.cargo || '-'}"><td>${r.name || '-'}</td><td>${r.rut || '-'}</td><td><span class="cargo-pill">${compactCargo(r.cargo || '-')}</span></td><td>${r.startDay}</td><td>${r.lastAbsentDay}</td><td>${r.returnDay || 'Sin retorno'}</td><td><span class="days-strong">${r.duration || '-'}</span></td><td><strong>${r.codes || '-'}</strong></td><td>${r.reason || '-'}</td></tr>`).join('')
         : '<tr><td colspan="9">Sin periodos de ausencia registrados en el mes.</td></tr>';
-      table.innerHTML = '<thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Inicio</th><th>Últ. ausente</th><th>Retorno</th><th>Días</th><th>Cód.</th><th>Causal</th></tr></thead><tbody>' + body + '</tbody>';
+      table.innerHTML = '<thead><tr><th>Trabajador</th><th>RUT</th><th>Cargo</th><th>Inicio</th><th>Ãšlt. ausente</th><th>Retorno</th><th>DÃ­as</th><th>CÃ³d.</th><th>Causal</th></tr></thead><tbody>' + body + '</tbody>';
     }
 
 
@@ -2587,9 +2587,9 @@
       const el = $('criticalList');
       if (!el) return;
       const rows = [];
-      if (s.gardenersDiff < 0) rows.push(`<div class="critical-row"><span>⚠️ Jardineros</span><span class="diff">${s.gardenersDiff}</span></div>`);
-      if (s.specialistsDiff < 0) rows.push(`<div class="critical-row"><span>⚠️ Especialistas</span><span class="diff">${s.specialistsDiff}</span></div>`);
-      el.innerHTML = rows.length ? rows.join('') : '<div class="critical-row"><span>✅ Sin cargos críticos</span><span class="positive">Cumple</span></div>';
+      if (s.gardenersDiff < 0) rows.push(`<div class="critical-row"><span>âš ï¸ Jardineros</span><span class="diff">${s.gardenersDiff}</span></div>`);
+      if (s.specialistsDiff < 0) rows.push(`<div class="critical-row"><span>âš ï¸ Especialistas</span><span class="diff">${s.specialistsDiff}</span></div>`);
+      el.innerHTML = rows.length ? rows.join('') : '<div class="critical-row"><span>âœ… Sin cargos crÃ­ticos</span><span class="positive">Cumple</span></div>';
     }
 
     function updateDailyTable(s) {
@@ -2601,12 +2601,12 @@
       const clsFor = (diff) => diff < 0 ? 'negative' : diff > 0 ? 'positive' : 'neutral';
       const cellFor = (day, diff) => {
         if (!last || day > last || diff === null || diff === undefined || Number.isNaN(diff)) {
-          return '<td class="future-day">—</td>';
+          return '<td class="future-day">â€”</td>';
         }
         return `<td class="${clsFor(diff)}">${fmtDiff(diff)}</td>`;
       };
 
-      let html = '<thead><tr><th>Día</th>' + days.map(d => `<th>${d}</th>`).join('') + '</tr></thead><tbody>';
+      let html = '<thead><tr><th>DÃ­a</th>' + days.map(d => `<th>${d}</th>`).join('') + '</tr></thead><tbody>';
       html += '<tr><td>Jardineros</td>';
       days.forEach(day => {
         const present = s.presentByCargoDay[day]?.Jardinero?.size;
@@ -2634,7 +2634,7 @@
     }
 
     function updateAppealText(s) {
-      setText('appealText', `Resumen Beta: último día analizado ${s.lastAnalyzedDay}; dotación requerida ${BASE_REQUIRED}; dotación presente real actual ${fmt(s.currentPresent)}; diferencia ${s.totalDiff}; días no cubiertos desde día 3+ ${fmt(s.uncoveredDays)}; exposición estimada ${fmt(s.exposureUtm)} UTM / ${clp(s.exposureClp)}.`);
+      setText('appealText', `Resumen Beta: Ãºltimo dÃ­a analizado ${s.lastAnalyzedDay}; dotaciÃ³n requerida ${BASE_REQUIRED}; dotaciÃ³n presente real actual ${fmt(s.currentPresent)}; diferencia ${s.totalDiff}; dÃ­as no cubiertos desde dÃ­a 3+ ${fmt(s.uncoveredDays)}; exposiciÃ³n estimada ${fmt(s.exposureUtm)} UTM / ${clp(s.exposureClp)}.`);
     }
 
     function processSelectedSheet(sheetName) {
@@ -2646,7 +2646,7 @@
         : selectBestSheet(pendingWorkbook);
       const summary = analyzeTable(selected.table, month, year);
       updateDashboard(summary);
-      $('fileName').textContent = `${currentFileName || 'Excel cargado'} · hoja: ${selected.name}`;
+      $('fileName').textContent = `${currentFileName || 'Excel cargado'} Â· hoja: ${selected.name}`;
       const quickSheet = $('sheetQuickSelect');
       if (quickSheet && quickSheet.value !== selected.name) quickSheet.value = selected.name;
       const modalSheet = $('modalSheet');
@@ -2655,7 +2655,7 @@
     }
 
     function processFile(file) {
-      if (!file || !window.XLSX) return showToast('No se pudo leer: falta archivo o librería XLSX.');
+      if (!file || !window.XLSX) return showToast('No se pudo leer: falta archivo o librerÃ­a XLSX.');
       if (pendingWorkbook) {
         processSelectedSheet($('modalSheet')?.value || '__auto__');
         return;
@@ -2701,7 +2701,7 @@
           const best = selectBestSheet(pendingWorkbook);
           const sheetSelect = $('modalSheet');
           if (sheetSelect) {
-            sheetSelect.innerHTML = '<option value="__auto__">Detectar automáticamente</option>' + pendingWorkbook.SheetNames.map(name => `<option value="${name}">${name}</option>`).join('');
+            sheetSelect.innerHTML = '<option value="__auto__">Detectar automÃ¡ticamente</option>' + pendingWorkbook.SheetNames.map(name => `<option value="${name}">${name}</option>`).join('');
             if (best?.name) sheetSelect.value = best.name;
           }
 
@@ -2744,8 +2744,8 @@
     $('copySummaryBtn').addEventListener('click', async () => {
       if (!currentSummary) return showToast('Primero carga un Excel para generar el resumen.');
       const s = currentSummary;
-      const text = `AKRO Dotación AI Beta - ${s.period}\n\nDotación requerida: ${BASE_REQUIRED}\nTrabajadores nominales: ${s.nominal}\nDotación presente real actual día ${s.lastAnalyzedDay}: ${s.currentPresent}\nDiferencia vs base técnica actual: ${s.totalDiff}\nAusencias registradas: ${s.totalAbsenceMarks}\nTrabajadores con posible multa por ausencia: ${s.workersWithPotentialFine || 0}
-Días que exigen reemplazo día 3+: ${s.daysRequireReplacement}\nDías cubiertos mismo cargo: ${s.coveredDays}\nDías no cubiertos: ${s.uncoveredDays}\nExposición: ${s.exposureUtm} UTM / ${clp(s.exposureClp)}\n\nRegla: día 1 y 2 no multan; desde día 3+ exige reemplazo; solo T o ING cortan la cadena.`;
+      const text = `AKRO DotaciÃ³n AI Beta - ${s.period}\n\nDotaciÃ³n requerida: ${BASE_REQUIRED}\nTrabajadores nominales: ${s.nominal}\nDotaciÃ³n presente real actual dÃ­a ${s.lastAnalyzedDay}: ${s.currentPresent}\nDiferencia vs base tÃ©cnica actual: ${s.totalDiff}\nAusencias registradas: ${s.totalAbsenceMarks}\nTrabajadores con posible multa por ausencia: ${s.workersWithPotentialFine || 0}
+DÃ­as que exigen reemplazo dÃ­a 3+: ${s.daysRequireReplacement}\nDÃ­as cubiertos mismo cargo: ${s.coveredDays}\nDÃ­as no cubiertos: ${s.uncoveredDays}\nExposiciÃ³n: ${s.exposureUtm} UTM / ${clp(s.exposureClp)}\n\nRegla: dÃ­a 1 y 2 no multan; desde dÃ­a 3+ exige reemplazo; solo T o ING cortan la cadena.`;
       await navigator.clipboard.writeText(text);
       showToast('Resumen copiado al portapapeles.');
     });
@@ -2808,7 +2808,7 @@ Días que exigen reemplazo día 3+: ${s.daysRequireReplacement}\nDías cubiertos
         currentSummary.gardenersDiff = currentSummary.currentGardeners - REQUIRED_GARDENERS;
         currentSummary.specialistsDiff = currentSummary.currentSpecialists - REQUIRED_SPECIALISTS;
         updateDashboard(currentSummary);
-        showToast('Base técnica actualizada y dashboard recalculado.');
+        showToast('Base tÃ©cnica actualizada y dashboard recalculado.');
       }
     }
 
